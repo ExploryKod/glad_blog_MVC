@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+    php:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: always
+        ports:
+            - "1300:80"
+        volumes:
+            - ./app:/var/www/html
+
+    database:
+        image: mariadb
+        restart: always
+        volumes:
+            - db_glad_blog:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: glad_blog
+            MYSQL_ROOT_PASSWORD: password
+
+    adminer:
+        image: adminer
+        ports:
+            -  "1301:8080"
+
+volumes:
+    db_glad_blog:
