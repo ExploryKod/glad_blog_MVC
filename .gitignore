@@ -1,3 +1,9 @@
 .idea/
 .idea
 .idea/**/*
+
+vendor/
+vendor/*
+vendor/*/**
+
+.DS_Store
