@@ -15,7 +15,7 @@ services:
         image: mariadb
         restart: always
         volumes:
-            - db_glad_blog:/var/lib/mysql
+            - ./database/dump.sql:/docker-entrypoint-initdb.d/dump.sql
         environment:
             MYSQL_DATABASE: glad_blog
             MYSQL_ROOT_PASSWORD: password
