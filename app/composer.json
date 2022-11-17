@@ -3,7 +3,7 @@
     "description": "a blog to learn mvc pattern",
     "autoload": {
         "psr-4": {
-            "Amaury\\Gladblog\\": "app/src/"
+            "Gladblog\\": "src/"
         }
     },
     "require": {}
