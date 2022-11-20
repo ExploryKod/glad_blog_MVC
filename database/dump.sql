@@ -17,6 +17,7 @@ CREATE TABLE `posts` (
                          `content` varchar(255) NOT NULL,
                          `author` int(11) DEFAULT NULL,
                          `title` varchar(150) DEFAULT NULL,
+                         `public` int(11) NULL,
                          PRIMARY KEY (`id`),
                          KEY `author` (`author`),
                          CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`author`) REFERENCES `user` (`id`)
@@ -26,6 +27,10 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `username` varchar(100) NOT NULL,
+                        `first_name` varchar(100) NULL,
+                        `last_name` varchar(100) NULL,
+                        `email` varchar(150) NULL,
+                        `birth_date` varchar(50) NULL,
                         `password` varchar(100) NOT NULL,
                         `status` varchar(100) NULL,
                         PRIMARY KEY (`id`)

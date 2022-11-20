@@ -20,9 +20,15 @@ class PostController extends AbstractController
     {
         $showAllPosts = new PostManager(new PDOFactory());
         $posts = $showAllPosts->getAllPosts();
+        $styleLinks = ['/public/css/style.css',
+                       '/public/css/base.css',
+                       '/public/lib/materialize/css/materialize.css',
+                       'https://fonts.googleapis.com/icon?family=Material+Icons'
+                      ];
+        $scripts = ['/public/lib/materialize/js/materialize.js'];
 
         $this->render("home.php", [
             "posts" => $posts,
-        ], "Votre homepage");
+        ], "Votre homepage", $styleLinks, $scripts);
     }
 }

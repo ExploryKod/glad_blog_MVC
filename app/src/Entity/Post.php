@@ -12,6 +12,7 @@ class Post extends BaseEntity
     private int $id;
     private string $content;
     private int $author;
+    private string $title;
 
     /**
      * @return int
@@ -64,6 +65,17 @@ class Post extends BaseEntity
     public function setAuthor(int $author): Post
     {
         $this->author = $author;
+        return $this;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): Post
+    {
+        $this->title = $title;
         return $this;
     }
 }
