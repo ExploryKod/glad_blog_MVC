@@ -31,6 +31,7 @@ class UserManager extends BaseManager
         $data = $query->fetch(\PDO::FETCH_ASSOC);
 
         if ($data) {
+            // En retournant l'objet lui-même on peux appeler getByUserName depuis cette class tout en chaînant pour aller chercher les méthodes de User aussi
             return new User($data);
         }
 

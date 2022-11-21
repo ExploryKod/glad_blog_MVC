@@ -8,6 +8,18 @@ use Gladblog\Route\Route;
 
 class SecurityController extends AbstractController
 {
+    #[Route('/login', name: "login", methods: ["GET"])]
+    public function directLoginPage()
+    {
+        $links = ['/public/css/style.css',
+            '/public/css/base.css',
+            '/public/lib/materialize/css/materialize.css',
+            'https://fonts.googleapis.com/icon?family=Material+Icons'
+        ];
+        $scripts = ['/public/lib/materialize/js/materialize.js'];
+        $this->render("login.php", [], "Login page", $links, $scripts);
+    }
+
     #[Route('/login', name: "login", methods: ["POST"])]
     public function login()
     {
@@ -18,19 +30,27 @@ class SecurityController extends AbstractController
         $user = $userManager->getByUsername($formUsername);
 
         if (!$user) {
-            header("Location: /?error=notfound");
+            header("Location: /?error=no-user");
             exit;
         }
 
-        if ($user->passwordMatch($formPwd)) {
+            $links = ['/public/css/style.css',
+                '/public/css/base.css',
+                '/public/lib/materialize/css/materialize.css',
+                'https://fonts.googleapis.com/icon?family=Material+Icons'
+            ];
+            $scripts = ['/public/lib/materialize/js/materialize.js'];
 
-            $this->render("user/showUsers.php", [
-                "message" => "je suis un message"
+            $this->render("users/showUsers.php", [
+                "message" => "je suis un message",
+                "data" => $userManager->getByUsername($formUsername),
+                "hash" => $userManager->getByUsername($formUsername)->getHashedPassword()
+
             ],
-                "titre de la page");
-        }
+                "logged space", $links, $scripts);
 
-        header("Location: /?error=notfound");
-        exit;
+
+        //header("Location: /?error=notfound");
+        //exit;
     }
 }

@@ -36,6 +36,10 @@ CREATE TABLE `user` (
                         PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
 
+INSERT INTO `user` (`id`, `username`, `password`) VALUES
+    (16,	'amaury',	'$2y$12$cP/DRVfKnPepJpBxZqiGWOFsPBuLADR37o8RMXhyFGGZkURnrolQe'),
+    (15, 'franssen', 'radis');
+
 DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,

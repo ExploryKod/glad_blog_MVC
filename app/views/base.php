@@ -13,6 +13,11 @@
 </head>
 <body>
 
+<?php
+echo '<pre>';
+var_dump($_POST);
+echo '</pre>'; ?>
+
 <?= $_pageContent; ?>
 
 <?php foreach($_pageRelativeScripts as $script) { ?>

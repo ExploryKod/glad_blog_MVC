@@ -10,11 +10,11 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
     private ?int $id;
     private string $username;
     private string $password;
-    private string $email;
-    private string $firstName;
-    private string $lastName;
-    private ?string $gender;
-    private array $roles = [];
+    private string | null $email;
+    private string | null $firstName;
+    private string | null $lastName;
+    private string | null $gender;
+    private array | null $roles = [];
 
     /**
      * @return int
@@ -35,36 +35,36 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
     }
 
     /**
-     * @return string
+     * @return ?string
      */
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
 
     /**
-     * @param string $username
+     * @param ?string $username
      * @return User
      */
-    public function setUsername(string $username): User
+    public function setUsername(?string $username): User
     {
         $this->username = $username;
         return $this;
     }
 
     /**
-     * @return string
+     * @return ?string
      */
-    public function getEmail(): string
+    public function getEmail(): string | null
     {
         return $this->email;
     }
 
     /**
-     * @param string $email
+     * @param ?string $email
      * @return User
      */
-    public function setEmail(string $email): User
+    public function setEmail(string | null $email): User | null
     {
         $this->email = $email;
         return $this;
@@ -73,7 +73,7 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -91,7 +91,7 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -109,7 +109,7 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
     /**
      * @return string
      */
-    public function getGender(): string
+    public function getGender(): ?string
     {
         return $this->gender;
     }
@@ -127,7 +127,7 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
     /**
      * @return array
      */
-    public function getRoles(): array
+    public function getRoles(): ?array
     {
         $roles = $this->roles;
         $roles[] = "ROLE_USER";
@@ -144,13 +144,34 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
         return $this;
     }
 
-    public function getHashedPassword(): string
+    public function setPassword(string $password): User
     {
-        return 'coucou';
+        $this->password = $password;
+        return $this;
     }
 
-    public function passwordMatch(string $plainPwd): bool
+    // le password en dur sans hashage n'est accessible que depuis cette class
+    private function getPassword(): string
     {
-        return true;
+        return $this->password;
+    }
+
+    public function getHashedPassword(): string
+    {
+        // On hash le mot de passe avec Bcrypt, via un coût de 12
+        $cost = ['cost' => 12];
+        $password = $this->getPassword();
+        password_hash($password, PASSWORD_BCRYPT, $cost);
+        return $password;
+    }
+
+    public function passwordMatch(string $plainPwd, $hash): bool
+    {
+        if (password_verify($plainPwd, $hash)){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }
