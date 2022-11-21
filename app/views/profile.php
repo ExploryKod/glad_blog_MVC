@@ -1,1 +1,0 @@
-<h1>Bravo, vous êtes enregistré</h1>

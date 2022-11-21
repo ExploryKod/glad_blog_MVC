@@ -3,8 +3,36 @@ echo '<pre>';
 var_dump($posts);
 echo '</pre>';
 ?>
+
+<?php
+if(isset($_GET['error']) && ($_GET['error'] === 'password-no-ok')) {
+    echo '<div class="container blue light-blue">
+            <div class="row">
+                <p class="">Mot de passe invalide</p>
+            </div>
+        </div>';
+}
+
+if(isset($_GET['error']) && ($_GET['error'] === 'notfound')) {
+    echo '<div class="container grey">
+    <div class="row">
+        <p class="">Nous ne vous avons pas trouvé</p>
+    </div>
+</div>';
+}
+
+if(isset($_GET['error']) && ($_GET['error'] === 'no-user')) {
+    echo '<div class="container grey">
+    <div class="row">
+        <p class="">Nous ne vous avons pas trouvé</p>
+    </div>
+</div>';
+}
+
+?>
+
 <h1>HOME</h1>
-<a href="login.php"></a>
+<a href="/login">login</a>
 <div class="container">
     <div class="row">
         <div class="col s12 m7">

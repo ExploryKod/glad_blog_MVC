@@ -38,11 +38,21 @@ class UserManager extends BaseManager
         return null;
     }
 
-    public function insertUser(User $user)
+    public function insertUser(string $password, string $username)
     {
-        $query = $this->pdo->prepare("INSERT INTO user (password, username), VALUES (:password, :username)");
-        $query->bindValue("password", $user->getHashedPassword(), \PDO::PARAM_STR);
-        $query->bindValue("username", $user->getUsername(), \PDO::PARAM_STR);
+        $cost = ['cost' => 12];
+        $password = password_hash($password, PASSWORD_BCRYPT, $cost);
+        $query = $this->pdo->prepare("INSERT INTO user (password, username) VALUES (:password, :username)");
+        $query->bindValue("password", $password, \PDO::PARAM_STR);
+        $query->bindValue("username", $username, \PDO::PARAM_STR);
         $query->execute();
+    }
+
+    public function deleteUser(int | null $userId, string | null $username)
+    {
+        $dropUserReq = $this->pdo->prepare("DELETE FROM user WHERE id = :userId AND username = :username");
+        $dropUserReq->bindValue("userId", $userId, \PDO::PARAM_STR);
+        $dropUserReq->bindValue("username", $username, \PDO::PARAM_STR);
+        $dropUserReq->execute();
     }
 }

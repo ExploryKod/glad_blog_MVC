@@ -164,9 +164,10 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
         password_hash($password, PASSWORD_BCRYPT, $cost);
         return $password;
     }
-
-    public function passwordMatch(string $plainPwd, $hash): bool
+    // Comment utiliser cette méthode sans refaire sans cesse un hashage ? Méthode inutilisée.
+    public function passwordMatch(string $plainPwd): bool
     {
+        $hash = $this->getHashedPassword();
         if (password_verify($plainPwd, $hash)){
             return true;
         }

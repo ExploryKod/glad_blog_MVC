@@ -6,7 +6,7 @@ use Gladblog\Factory\PDOFactory;
 use Gladblog\Manager\UserManager;
 use Gladblog\Route\Route;
 
-class SecurityController extends AbstractController
+class LoginController extends AbstractController
 {
     #[Route('/login', name: "login", methods: ["GET"])]
     public function directLoginPage()
@@ -23,8 +23,8 @@ class SecurityController extends AbstractController
     #[Route('/login', name: "login", methods: ["POST"])]
     public function login()
     {
-        $formUsername = $_POST['username'] ?? "toto";
-        $formPwd = $_POST['password'] ?? "toto";
+        $formUsername = $_POST['username'];
+        $formPwd = $_POST['password'];
 
         $userManager = new UserManager(new PDOFactory());
         $user = $userManager->getByUsername($formUsername);
@@ -34,6 +34,7 @@ class SecurityController extends AbstractController
             exit;
         }
 
+        if ($user->passwordMatch($formPwd))  {
             $links = ['/public/css/style.css',
                 '/public/css/base.css',
                 '/public/lib/materialize/css/materialize.css',
@@ -41,16 +42,20 @@ class SecurityController extends AbstractController
             ];
             $scripts = ['/public/lib/materialize/js/materialize.js'];
 
-            $this->render("users/showUsers.php", [
-                "message" => "je suis un message",
-                "data" => $userManager->getByUsername($formUsername),
-                "hash" => $userManager->getByUsername($formUsername)->getHashedPassword()
-
+            $this->render("users/profile.php", [
+                "message" => "hash est vérifié",
+                "userData" => $userManager->getByUsername($formUsername),
+                "hash" => $userManager->getByUsername($formUsername)->getHashedPassword(),
+                "data" => $_POST
             ],
-                "logged space", $links, $scripts);
+                "profile", $links, $scripts);
 
+        } else {
+            header("Location: /?error=password-no-ok");
+            exit;
+        }
 
-        //header("Location: /?error=notfound");
-        //exit;
+        header("Location: /?error=notfound");
+        exit;
     }
 }

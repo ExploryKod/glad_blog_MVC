@@ -6,5 +6,5 @@ interface PasswordProtectedInterface
 {
     public function getHashedPassword(): string;
 
-    public function passwordMatch(string $plainPwd, $hash): bool;
+    public function passwordMatch(string $plainPwd): bool;
 }
