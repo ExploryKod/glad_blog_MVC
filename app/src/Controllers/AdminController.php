@@ -7,17 +7,26 @@ use Gladblog\Route\Route;
 
 class AdminController extends AbstractController
 {
-    #[Route('/backoffice', name: "deleteUser", methods: ["GET"])]
+    #[Route('/backoffice', name: "backOffice", methods: ["GET"])]
     public function accessBackoffice() {
-        $styleLinks = ['/public/css/style.css',
+
+        $userManager = new UserManager(new PDOFactory());
+        $users = $userManager->getAllUsers();
+
+
+        $styleLinks = [
+            '/public/css/style.css',
             '/public/css/base.css',
-            '/public/lib/materialize/css/materialize.css',
+//            '/public/lib/materialize/css/materialize.css',
             'https://fonts.googleapis.com/icon?family=Material+Icons'
         ];
-        $scripts = ['/public/lib/materialize/js/materialize.js'];
+        $scripts = [
+//            '/public/lib/materialize/js/materialize.js',
+            '/public/js/script.js'];
 
         $this->render("admin/backoffice.php", [
             "message" => '',
+            "userInfos" => $users,
         ], "backoffice", $styleLinks, $scripts);
     }
 
@@ -36,10 +45,12 @@ class AdminController extends AbstractController
 
             $styleLinks = ['/public/css/style.css',
                 '/public/css/base.css',
-                '/public/lib/materialize/css/materialize.css',
+//                '/public/lib/materialize/css/materialize.css',
                 'https://fonts.googleapis.com/icon?family=Material+Icons'
             ];
-            $scripts = ['/public/lib/materialize/js/materialize.js'];
+            $scripts = [
+//                         '/public/lib/materialize/js/materialize.js',
+                        '/public/js/script.js'];
 
             $this->render("admin/backoffice.php", [
                 "message" => $formUserName.'a été supprimé de la base',
@@ -49,4 +60,65 @@ class AdminController extends AbstractController
         }
 
     }
+
+    #[Route('/updateUser', name: "updateUser", methods: ["POST"])]
+    public function updateUser()
+    {
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+            if (isset($_POST['update-user'])) {
+
+                $UserName =  filter_input(INPUT_POST, "username-checked");
+                $formUserId = intval(htmlspecialchars($_POST['userId']));
+                $userManager = new UserManager(new PDOFactory());
+                $user = $userManager->getByUsername($UserName);
+
+                if($user) {
+                    $args = [];
+                    $updateFeed = [
+                        'first_name' => filter_input( INPUT_POST, "first_name") ?? null,
+                        'last_name' => filter_input( INPUT_POST, "last_name") ?? null,
+                        'email' => filter_input( INPUT_POST, "email") ?? null,
+                        'birth_date' => filter_input( INPUT_POST, "birth_date") ?? null,
+                        'password' => filter_input( INPUT_POST, "password") ?? null,
+                        'username' => filter_input( INPUT_POST, "username") ?? null,
+                        'status' => filter_input( INPUT_POST, "status") ?? null,
+                    ];
+                    foreach($updateFeed as $key => $value) {
+                        if($value !== null) {
+                            $args[$key] = $value;
+                        }
+                    }
+
+                    $userManager->updateUser($formUserId, $UserName, $args);
+
+                    $styleLinks = ['/public/css/style.css',
+                        '/public/css/base.css',
+//                        '/public/lib/materialize/css/materialize.css',
+                        'https://fonts.googleapis.com/icon?family=Material+Icons'
+                    ];
+                    $scripts = [
+//                        '/public/lib/materialize/js/materialize.js',
+                                '/public/js/script.js'
+                    ];
+
+                    $this->render("admin/backoffice.php", [
+                        "message" => $UserName.'a été modifié dans la base',
+                    ], "backoffice", $styleLinks, $scripts);
+                } else {
+                    header('Location: \?error=nousertoupdate');
+                    exit();
+                }
+                header('Location: \?error=submitnotworking');
+                exit();
+
+            }
+            header('Location: \?error=nopostmethod');
+            exit();
+        }
+
+    }
 }
+
+

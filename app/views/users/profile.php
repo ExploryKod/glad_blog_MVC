@@ -1,11 +1,18 @@
 <?php
+if($message) {
+    echo 'message:';
+    var_dump($message);
+} elseif ($data) {
+    echo '<pre>';
+    var_dump($data);
+    echo '</pre>';
+} elseif ($hash) {
+    echo'---------hash:';
+    var_dump($hash);
+}
 
-var_dump($message);
-echo '<pre>';
-var_dump($data);
-echo '</pre>';
-echo'---------hash:';
-var_dump($hash);
+
+
 
 if($userData) {
     var_dump($userData);

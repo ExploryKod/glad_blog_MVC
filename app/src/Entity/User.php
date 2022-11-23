@@ -7,19 +7,21 @@ use Gladblog\Interfaces\UserInterface;
 
 class User extends BaseEntity implements UserInterface, PasswordProtectedInterface
 {
-    private ?int $id;
-    private string $username;
-    private string $password;
-    private string | null $email;
-    private string | null $firstName;
-    private string | null $lastName;
-    private string | null $gender;
+    private ?int $id = null;
+    private string | null $username = null;
+    private string | null $password = null;
+    private string | null $email = null;
+    private string | null $first_name = null;
+    private string | null $last_name = null;
+    private string | null $birth_date = null;
+    private string | null $gender = null;
+    private ?string $status = null;
     private array | null $roles = [];
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): int | null
     {
         return $this->id;
     }
@@ -33,6 +35,17 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
         $this->id = $id;
         return $this;
     }
+
+     public function setStatus(string | null $status): User
+     {
+         $this->status = $status;
+         return $this;
+     }
+
+   public function getStatus(): string | null
+   {
+       return $this->status;
+   }
 
     /**
      * @return ?string
@@ -49,6 +62,24 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
     public function setUsername(?string $username): User
     {
         $this->username = $username;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBirth_date(): ?string
+    {
+        return $this->birth_date;
+    }
+
+    /**
+     * @param string|null $birth_date
+     * @return $this
+     */
+    public function setBirth_date(?string $birth_date): User
+    {
+        $this->birth_date = $birth_date;
         return $this;
     }
 
@@ -73,36 +104,36 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
     /**
      * @return string
      */
-    public function getFirstName(): ?string
+    public function getFirst_name(): ?string
     {
-        return $this->firstName;
+        return $this->first_name;
     }
 
     /**
      * @param string $firstName
      * @return User
      */
-    public function setFirstName(string $firstName): User
+    public function setFirst_name(string $first_name): User
     {
-        $this->firstName = $firstName;
+        $this->first_name = $first_name;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getLastName(): ?string
+    public function getLast_name(): ?string
     {
-        return $this->lastName;
+        return $this->last_name;
     }
 
     /**
      * @param string $lastName
      * @return User
      */
-    public function setLastName(string $lastName): User
+    public function setLast_name(string $last_name): User
     {
-        $this->lastName = $lastName;
+        $this->last_name = $last_name;
         return $this;
     }
 
@@ -151,7 +182,7 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
     }
 
     // le password en dur sans hashage n'est accessible que depuis cette class
-    private function getPassword(): string
+    private function getPassword(): ?string
     {
         return $this->password;
     }
@@ -175,4 +206,5 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
             return false;
         }
     }
+
 }

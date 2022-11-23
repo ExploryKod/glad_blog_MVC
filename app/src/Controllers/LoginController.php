@@ -16,7 +16,7 @@ class LoginController extends AbstractController
             '/public/lib/materialize/css/materialize.css',
             'https://fonts.googleapis.com/icon?family=Material+Icons'
         ];
-        $scripts = ['/public/lib/materialize/js/materialize.js'];
+        $scripts = ['/public/lib/materialize/js/materialize.js',   '/public/js/script.js'];
         $this->render("login.php", [], "Login page", $links, $scripts);
     }
 
@@ -40,7 +40,7 @@ class LoginController extends AbstractController
                 '/public/lib/materialize/css/materialize.css',
                 'https://fonts.googleapis.com/icon?family=Material+Icons'
             ];
-            $scripts = ['/public/lib/materialize/js/materialize.js'];
+            $scripts = ['/public/lib/materialize/js/materialize.js',  '/public/js/script.js'];
 
             $this->render("users/profile.php", [
                 "message" => "hash est vérifié",

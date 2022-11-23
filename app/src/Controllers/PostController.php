@@ -20,6 +20,7 @@ class PostController extends AbstractController
     {
         $showAllPosts = new PostManager(new PDOFactory());
         $posts = $showAllPosts->getAllPosts();
+
         $styleLinks = ['/public/css/style.css',
                        '/public/css/base.css',
                        '/public/lib/materialize/css/materialize.css',
@@ -30,5 +31,35 @@ class PostController extends AbstractController
         $this->render("home.php", [
             "posts" => $posts,
         ], "Votre homepage", $styleLinks, $scripts);
+    }
+
+    #[Route('/writer', name: "writerpage", methods: ["GET"])]
+    public function writerByGet()
+    {
+        $styleLinks = ['/public/css/style.css',
+            '/public/css/base.css',
+            //'/public/lib/materialize/css/materialize.css',
+            //'https://fonts.googleapis.com/icon?family=Material+Icons'
+        ];
+        $scripts = [
+            //'/public/lib/materialize/js/materialize.js'
+        ];
+
+        $this->render("users/writer.php", [], "Espace d'écriture", $styleLinks, $scripts);
+    }
+
+    #[Route('/writer', name: "writer", methods: ["POST"])]
+    public function writerByPost()
+    {
+        $styleLinks = ['/public/css/style.css',
+            '/public/css/base.css',
+            //'/public/lib/materialize/css/materialize.css',
+            'https://fonts.googleapis.com/icon?family=Material+Icons'
+        ];
+        $scripts = [
+            //'/public/lib/materialize/js/materialize.js'
+        ];
+
+        $this->render("users/writer.php", [], "Espace d'écriture", $styleLinks, $scripts);
     }
 }
