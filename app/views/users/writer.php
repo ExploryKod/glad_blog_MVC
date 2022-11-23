@@ -1,18 +1,23 @@
 <h1>Writer</h1>
+<?php
 
+if(isset($myPost)) {
+    var_dump($myPost);
+}
+?>
 <section class="mt-5 row">
 
     <article class="col-sm-6 container-fluid d-flex align-items-start justify-content-center">
-        <form action="../models/postData.php" method="POST">
+        <form action="/register_post" method="POST">
             <section class="shadow p-5 bg-light">
                 <div class="mb-3">
-                    <label class="form-label" for="username">Titre du post: <span>*</span> :</label>
-                    <input class="form-control"  id="username" type="text" name="title" maxlength="250" required >
+                    <label class="form-label" for="title">Titre du post: <span>*</span> :</label>
+                    <input class="form-control"  id="title" type="text" name="title" maxlength="250" required >
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label" for="post">Texte du post: <span>*</span> :</label>
-                    <textarea class="form-control" id="post" name="post"  cols="30" rows="4" placeholder="Entrez votre texte" onfocus="this.onfocus=null;" maxlength="950" required ></textarea>
+                    <label class="form-label" for="content">Texte du post: <span>*</span> :</label>
+                    <textarea class="form-control" id="content" name="content"  cols="30" rows="4" placeholder="Entrez votre texte" onfocus="this.onfocus=null;" maxlength="950" required ></textarea>
                 </div>
 
                 <div class="mb-3">
@@ -23,9 +28,18 @@
     </article>
 
     <article class="col-sm-6 container d-flex flex-column align-items-start justify-content-start">
+       <?php
+       if(isset($_GET['success']) && $_GET['success'] === 'newarticle') {
+           echo "<div class='alert-success'>
+                      <p>Votre article est bien publié</p>
+                 </div>";
+       }
 
+       ?>
 
-        <?php if(isset($your_id) && ($_SESSION['user'] === $your_id)) { ?>
+        <?php
+        $your_id = 20;
+        if(isset($your_id)) { ?>
             <h2>Liste de vos articles: </h2>
             <table class="table">
                 <thead>
@@ -37,16 +51,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach($allvalues as $one_post):
-                    if($your_id === $one_post['user_id']):
+                <?php
+                    foreach($posts as $one_post):
+                    if($your_id === $one_post->getAuthor()):
                         ?>
-
                         <tr>
-                            <th scope="row"><?php echo $one_post['id'] ?></th>
-                            <th scope="row"><?php echo $one_post['user_id'] ?></th>
-                            <td><?php echo $one_post['title'] ?></td>
-                            <td><a href='models/delete.php?id=<?php echo $one_post['id'] ?>'>Supprimer ce post </a></td>
-                            <td><a href='update_form.php?id=<?php echo $one_post['id'] ?>'>modifier ce post </a></td>
+                            <th scope="row"><?php echo $one_post->getId() ?></th>
+                            <th scope="row"><?php echo $one_post->getAuthor() ?></th>
+                            <td><?php echo $one_post->getTitle() ?></td>
+                            <td><a href='/writer?id=<?php echo $one_post->getId() ?>'>Supprimer ce post </a></td>
+                            <td><a href='/writer?id=<?php echo $one_post->getId() ?>'>modifier ce post </a></td>
                             <td></td>
                         </tr>
                     <?php endif ?>
@@ -71,17 +85,15 @@
             </tr>
             </thead>
             <tbody>
-            <?php foreach($allposts as $a_post): ?>
+            <?php foreach($posts as $a_post): ?>
                 <tr>
-                    <th scope="row"><?php echo $a_post['id'] ?></th>
-                    <td><?php echo $a_post['title'] ?></td>
-                    <td><a href='readPost.php?id=<?php echo $a_post['id']?>'>Consulter ce post </a></td>
+                    <th scope="row"><?php echo $a_post->getId() ?></th>
+                    <td><?php echo $a_post->getTitle() ?></td>
+                    <td><a href='readPost.php?id=<?php echo $a_post->getAuthor() ?>'>Consulter ce post </a></td>
                     <td></td>
                 </tr>
             <?php endforeach ?>
             </tbody>
         </table>
-
     </article>
-
 </section>

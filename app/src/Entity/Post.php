@@ -9,15 +9,15 @@ namespace Gladblog\Entity;
 
 class Post extends BaseEntity
 {
-    private int $id;
-    private string $content;
-    private int $author;
-    private string $title;
+    private int | null $id;
+    private string | null $content;
+    private int | null $author;
+    private string | null $title;
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): int | null
     {
         return $this->id;
     }
@@ -26,7 +26,7 @@ class Post extends BaseEntity
      * @param int $id
      * @return Post
      */
-    public function setId(int $id): Post
+    public function setId(int | null $id): Post
     {
         $this->id = $id;
         return $this;
@@ -35,7 +35,7 @@ class Post extends BaseEntity
     /**
      * @return string
      */
-    public function getContent(): string
+    public function getContent(): string | null
     {
         return $this->content;
     }
@@ -44,7 +44,7 @@ class Post extends BaseEntity
      * @param string $content
      * @return Post
      */
-    public function setContent(string $content): Post
+    public function setContent(string | null $content): Post
     {
         $this->content = $content;
         return $this;
@@ -53,7 +53,7 @@ class Post extends BaseEntity
     /**
      * @return int
      */
-    public function getAuthor(): int
+    public function getAuthor(): int | null
     {
         return $this->author;
     }
@@ -62,18 +62,18 @@ class Post extends BaseEntity
      * @param int $author
      * @return Post
      */
-    public function setAuthor(int $author): Post
+    public function setAuthor(int | null $author): Post
     {
         $this->author = $author;
         return $this;
     }
 
-    public function getTitle(): string
+    public function getTitle(): string | null
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): Post
+    public function setTitle(string | null $title): Post
     {
         $this->title = $title;
         return $this;

@@ -36,21 +36,36 @@ class PostController extends AbstractController
     #[Route('/writer', name: "writerpage", methods: ["GET"])]
     public function writerByGet()
     {
-        $styleLinks = ['/public/css/style.css',
-            '/public/css/base.css',
-            //'/public/lib/materialize/css/materialize.css',
-            //'https://fonts.googleapis.com/icon?family=Material+Icons'
-        ];
-        $scripts = [
-            //'/public/lib/materialize/js/materialize.js'
-        ];
+     $postId = $_GET['id'] ?? null;
+     $showAllPosts = new PostManager(new PDOFactory());
+     $posts = $showAllPosts->getAllPosts();
+     if(isset($postId)) {
+         $showAllPosts->deletePost($postId);
+         header('Location: /writer?success=deletedpost');
+     }
 
-        $this->render("users/writer.php", [], "Espace d'écriture", $styleLinks, $scripts);
+    $styleLinks = ['/public/css/style.css',
+        '/public/css/base.css',
+        //'/public/lib/materialize/css/materialize.css',
+        //'https://fonts.googleapis.com/icon?family=Material+Icons'
+    ];
+    $scripts = [
+        //'/public/lib/materialize/js/materialize.js'
+    ];
+
+    $this->render("users/writer.php", [
+        'posts' => $posts ?? null,
+        'myPost' => $myPosts ?? null,
+        'tailwind' => false
+    ], "Espace d'écriture", $styleLinks, $scripts);
     }
 
     #[Route('/writer', name: "writer", methods: ["POST"])]
     public function writerByPost()
     {
+        $showAllPosts = new PostManager(new PDOFactory());
+        $posts = $showAllPosts->getAllPosts();
+
         $styleLinks = ['/public/css/style.css',
             '/public/css/base.css',
             //'/public/lib/materialize/css/materialize.css',
@@ -60,6 +75,26 @@ class PostController extends AbstractController
             //'/public/lib/materialize/js/materialize.js'
         ];
 
-        $this->render("users/writer.php", [], "Espace d'écriture", $styleLinks, $scripts);
+        $this->render("users/writer.php", [
+            'posts' => $posts,
+            'tailwind' => false
+        ], "Espace d'écriture", $styleLinks, $scripts);
     }
+
+     #[Route('/register_post', name: "writer", methods: ["POST"])]
+     public function register_post()
+     {
+           if(isset($_POST['register_article'])) {
+
+                $postManager = new PostManager(new PDOFactory());
+                $title = filter_input(INPUT_POST, 'title');
+                $content = filter_input(INPUT_POST, 'content');
+                $postManager->insertPost($title, $content);
+                header('Location: /writer?success=newarticle');
+                exit();
+           } else   {
+           header('Location: /writer?error=submitnull');
+           exit();
+           }
+     }
 }
