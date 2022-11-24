@@ -13,7 +13,6 @@ class AdminController extends AbstractController
         $userManager = new UserManager(new PDOFactory());
         $users = $userManager->getAllUsers();
 
-
         $styleLinks = [
             '/public/css/style.css',
             '/public/css/base.css',
@@ -27,6 +26,7 @@ class AdminController extends AbstractController
         $this->render("admin/backoffice.php", [
             "message" => '',
             "userInfos" => $users,
+            'tailwind' => [true, '/public/js/tailwind.js']
         ], "backoffice", $styleLinks, $scripts);
     }
 
@@ -54,6 +54,7 @@ class AdminController extends AbstractController
 
             $this->render("admin/backoffice.php", [
                 "message" => $formUserName.'a été supprimé de la base',
+                'tailwind' => [false, '/public/js/tailwind.js']
             ], "backoffice", $styleLinks, $scripts);
         } else {
             header('Location: \?error=nousertodelete');

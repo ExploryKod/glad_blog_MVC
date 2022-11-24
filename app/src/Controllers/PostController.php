@@ -30,6 +30,7 @@ class PostController extends AbstractController
 
         $this->render("home.php", [
             "posts" => $posts,
+            'tailwind' => [true, '/public/js/tailwind.js']
         ], "Votre homepage", $styleLinks, $scripts);
     }
 
@@ -56,7 +57,7 @@ class PostController extends AbstractController
     $this->render("users/writer.php", [
         'posts' => $posts ?? null,
         'myPost' => $myPosts ?? null,
-        'tailwind' => false
+        'tailwind' => [false, '/public/js/tailwind.js']
     ], "Espace d'écriture", $styleLinks, $scripts);
     }
 
@@ -77,7 +78,7 @@ class PostController extends AbstractController
 
         $this->render("users/writer.php", [
             'posts' => $posts,
-            'tailwind' => false
+            'tailwind' => [false, '/public/js/tailwind.js']  
         ], "Espace d'écriture", $styleLinks, $scripts);
     }
 

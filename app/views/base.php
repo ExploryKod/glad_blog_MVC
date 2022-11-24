@@ -5,8 +5,9 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <?php if(isset($tailwind) && $tailwind){ ?>
+    <?php if(isset($tailwind) && $tailwind[0]){ ?>
         <script src="https://cdn.tailwindcss.com"></script>
+        <script src=<?php $tailwind[1] ?>></script>
     <?php } else  { ?>
         <?php foreach($_pageRelativeLinks as $link) { ?>
         <link rel="stylesheet" href="<?= $link ?>">
@@ -14,6 +15,17 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <?php } ?>
     <title><?= $_pageTitle; ?></title>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        clifford: '#da373d',
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body>
 

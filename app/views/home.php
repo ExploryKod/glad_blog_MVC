@@ -32,6 +32,9 @@ if(isset($_GET['error']) && ($_GET['error'] === 'no-user')) {
 ?>
 
 <h1>HOME</h1>
+<h1 class="text-3xl font-bold underline text-clifford">
+    Hello world!
+</h1>
 <a href="/login">login</a>
 <div class="container">
     <div class="row">
