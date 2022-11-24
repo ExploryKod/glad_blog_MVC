@@ -25,5 +25,16 @@ services:
         ports:
             -  "1301:8080"
 
+    node:
+        image: "node:8"
+        user: "node"
+        working_dir: /var/www/html
+        environment:
+            - NODE_ENV=production
+        volumes:
+            - ./app:/var/www/html
+        command: > 
+            bash -c "npm install"
+
 volumes:
     db_glad_blog:
