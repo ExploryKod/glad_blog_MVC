@@ -36,27 +36,52 @@ if(isset($_GET['error']) && ($_GET['error'] === 'no-user')) {
     Hello world!
 </h1>
 <a href="/login">login</a>
-<div class="container">
-    <div class="row">
-        <div class="col s12 m7">
-            <?php foreach($posts as $post): ?>
-            <div class="row">
-                <div class="col s12 m7">
-                    <div class="card">
-                        <div class="card-image">
-                            <img src="https://images.pexels.com/photos/12179283/pexels-photo-12179283.jpeg">
-                            <span class="card-title"><?= $post->getTitle() ?></span>
-                        </div>
-                        <div class="card-content">
-                            <p><?= $post->getContent() ?> </p>
-                        </div>
-                        <div class="card-action">
-                            <p>En savoir plus sur <a href="#"><?= $post->getAuthor() ?></a></p>
+<section class="container">
+    <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
+        <?php foreach($posts as $post): ?>
+            <div class="grid-item">
+                <div class="row">
+                    <div class="col s12 m7">
+                        <div class="card">
+                            <div class="card-image">
+                                <span class="card-title"><?= $post->getTitle() ?></span>
+                            </div>
+                            <div class="card-content">
+                                <p><?= $post->getContent() ?> </p>
+                            </div>
+                            <div class="card-action">
+                                <p>En savoir plus sur <a href="author?name=<?= $post->getAuthor() ?>"><?= $post->getAuthor_name() ?></a></p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <?php endforeach ?>
-        </div>
+        <?php endforeach ?>
     </div>
-</div>
+</section>
+
+
+<!--<div class="container">-->
+<!--    <div class="row">-->
+<!--        <div class="col s12 m7">-->
+<!--            --><?php //foreach($posts as $post): ?>
+<!--            <div class="row">-->
+<!--                <div class="col s12 m7">-->
+<!--                    <div class="card">-->
+<!--                        <div class="card-image">-->
+<!--                            <img src="https://images.pexels.com/photos/12179283/pexels-photo-12179283.jpeg">-->
+<!--                            <span class="card-title">--><?//= $post->getTitle() ?><!--</span>-->
+<!--                        </div>-->
+<!--                        <div class="card-content">-->
+<!--                            <p>--><?//= $post->getContent() ?><!-- </p>-->
+<!--                        </div>-->
+<!--                        <div class="card-action">-->
+<!--                            <p>En savoir plus sur <a href="#">--><?//= $post->getAuthor() ?><!--</a></p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            --><?php //endforeach ?>
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

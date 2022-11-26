@@ -23,14 +23,14 @@ class PostController extends AbstractController
 
         $styleLinks = ['/public/css/style.css',
                        '/public/css/base.css',
-                       '/public/lib/materialize/css/materialize.css',
-                       'https://fonts.googleapis.com/icon?family=Material+Icons'
+                        '/public/css/masonry.css'
                       ];
-        $scripts = ['/public/lib/materialize/js/materialize.js'];
+        $scripts = ['/public/js/masonry.js',
+            '/public/lib/masonry/masonry.pkgd.min.js'];
 
         $this->render("home.php", [
             "posts" => $posts,
-            'tailwind' => [true, '/public/js/tailwind.js']
+            'tailwind' => [false, '/public/js/tailwind.js']
         ], "Votre homepage", $styleLinks, $scripts);
     }
 
@@ -98,4 +98,24 @@ class PostController extends AbstractController
            exit();
            }
      }
+
+    #[Route('/register_complex_post', name: "writer", methods: ["POST"])]
+    public function register_complex_post()
+    {
+        if(isset($_POST['register_article'])) {
+
+            $postManager = new PostManager(new PDOFactory());
+            $title = filter_input(INPUT_POST, 'title');
+            $content = filter_input(INPUT_POST, 'content');
+            $author_name = filter_input(INPUT_POST, 'author_name');
+            $article_status = filter_input(INPUT_POST, 'article_status');
+            $image = filter_input(INPUT_POST, 'image');
+            $postManager->insertComplexPost($title, $content, $author_name, $article_status, $image);
+            header('Location: /writer?success=newarticle');
+            exit();
+        } else   {
+            header('Location: /writer?error=submitnull');
+            exit();
+        }
+    }
 }

@@ -1,7 +1,6 @@
 <?php
-
 namespace Gladblog\Controllers;
-
+session_start();
 use Gladblog\Factory\PDOFactory;
 use Gladblog\Manager\UserManager;
 use Gladblog\Route\Route;
@@ -25,9 +24,11 @@ class LoginController extends AbstractController
     {
         $formUsername = $_POST['username'];
         $formPwd = $_POST['password'];
+        $userId = $_SESSION['userId'];
 
         $userManager = new UserManager(new PDOFactory());
-        $user = $userManager->getByUsername($formUsername);
+//        $user = $userManager->getByUsername($formUsername);
+        $user = $userManager->getByUserid($userId);
 
         if (!$user) {
             header("Location: /?error=no-user");

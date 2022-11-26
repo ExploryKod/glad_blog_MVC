@@ -60,6 +60,26 @@ class PostManager extends BaseManager
 
     }
 
+    public function insertComplexPost(string $title, string $content, string $author_name, int $articleStatus, string $image): array
+    {
+        $query = $this->pdo->prepare("INSERT INTO posts (content, title, public, image, author_name)
+                                                VALUES (:content, :title, :public, :image, :author_name)");
+        $query->bindValue("content", $content, \PDO::PARAM_STR);
+        $query->bindValue("title", $title, \PDO::PARAM_STR);
+        $query->bindValue("public", $articleStatus, \PDO::PARAM_STR);
+        $query->bindValue("image", $image, \PDO::PARAM_STR);
+        $query->bindValue("author_name", $author_name, \PDO::PARAM_STR);
+        $query->execute();
+
+        $complexPosts = [];
+        while ($data = $query->fetch(\PDO::FETCH_ASSOC)) {
+            $complexPosts[] = new Post($data);
+        }
+
+        return $complexPosts;
+
+    }
+
     public function deletePost(int $id){
         $dropPostReq = $this->pdo->prepare("DELETE FROM posts WHERE id = :id");
         $dropPostReq->bindValue("id", $id, \PDO::PARAM_STR);

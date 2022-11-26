@@ -27,6 +27,46 @@ if(isset($myPost)) {
         </form>
     </article>
 
+    <article class="col-sm-6 container-fluid d-flex align-items-start justify-content-center">
+        <form action="/register_complex_post" method="POST">
+            <section class="shadow p-5 bg-light">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Titre du post: <span>*</span> :</label>
+                    <input class="form-control"  id="title" type="text" name="title" maxlength="250" value="Pas de titre">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="content">Texte du post: <span>*</span> :</label>
+                    <textarea class="form-control" id="content" name="content" value="pas de content"  cols="60" rows="10" placeholder="Entrez votre texte" onfocus="this.onfocus=null;" maxlength="950" value="" required ></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="author_name">Votre prénom et nom: <span>*</span> :</label>
+                    <input class="form-control"  id="author_name" type="text" name="author_name" maxlength="250" value="Anonyme">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="image">Votre photo (copier le lien depuis internet) <span>*</span> :</label>
+                    <input  class="form-control" type="url" name="image" id="image"
+                            placeholder="https://example.com" pattern="https://.*" size="30"
+                            value="https://images.pexels.com/photos/12704642/pexels-photo-12704642.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                            required>
+                </div>
+
+                <div class="mb-3">
+                    <select class="form-select" name="article_status" aria-label="select inputs">
+                        <option selected value="1">article public</option>
+                        <option value="2">article privé</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <input class="btn btn-primary btn-lg" type="submit" value="Enregistrer l'article" name="register_article">
+                </div>
+            </section>
+        </form>
+    </article>
+
     <article class="col-sm-6 container d-flex flex-column align-items-start justify-content-start">
        <?php
        if(isset($_GET['success']) && $_GET['success'] === 'newarticle') {

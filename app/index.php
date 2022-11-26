@@ -57,6 +57,6 @@ foreach ($routesObj as $route) {
     exit();
 }
 
-echo "NO MATCH";
+require_once('views/404.php');
 
 die;

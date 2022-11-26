@@ -1,7 +1,6 @@
 <?php
-
 namespace Gladblog\Manager;
-
+session_start();
 use Gladblog\Entity\User;
 
 class UserManager extends BaseManager
@@ -21,6 +20,21 @@ class UserManager extends BaseManager
         }
 
         return $users;
+    }
+
+    public function getByUserid(string $userId): ?User
+    {
+        $query = $this->pdo->prepare("SELECT * FROM user WHERE id = :userId");
+        $query->bindValue("username", $userId, \PDO::PARAM_STR);
+        $query->execute();
+        $data = $query->fetch(\PDO::FETCH_ASSOC);
+
+        if ($data) {
+            // En retournant l'objet lui-même on peux appeler getByUserName depuis cette class tout en chaînant pour aller chercher les méthodes de User aussi
+            return new User($data);
+        }
+
+        return null;
     }
 
     public function getByUsername(string $username): ?User
@@ -49,11 +63,11 @@ class UserManager extends BaseManager
     }
 
     /**
-     * @param string $password
-     * @param string $username
+     * @param string|null $password
+     * @param string|null $username
      * @return void
      */
-    public function insertUser(string $password, string $username) : void
+    public function insertUser(string | null $password, string | null $username) : void
     {
         $cost = ['cost' => 12];
         $password = $this->makeHashedPassword($password, $cost);

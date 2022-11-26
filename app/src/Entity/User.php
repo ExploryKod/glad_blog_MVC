@@ -113,7 +113,7 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
      * @param string $firstName
      * @return User
      */
-    public function setFirst_name(string $first_name): User
+    public function setFirst_name(?string $first_name): User
     {
         $this->first_name = $first_name;
         return $this;
@@ -131,7 +131,7 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
      * @param string $lastName
      * @return User
      */
-    public function setLast_name(string $last_name): User
+    public function setLast_name(?string $last_name): User
     {
         $this->last_name = $last_name;
         return $this;
@@ -149,7 +149,7 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
      * @param string $gender
      * @return User
      */
-    public function setGender(string $gender): User
+    public function setGender(?string $gender): User
     {
         $this->gender = $gender;
         return $this;
@@ -169,7 +169,7 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
      * @param array $roles
      * @return User
      */
-    public function setRoles(array $roles): User
+    public function setRoles(?array $roles): User
     {
         $this->roles = $roles;
         return $this;
@@ -187,7 +187,7 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
         return $this->password;
     }
 
-    public function getHashedPassword(): string
+    public function getHashedPassword(): ?string
     {
         // On hash le mot de passe avec Bcrypt, via un coût de 12
         $cost = ['cost' => 12];
@@ -196,7 +196,7 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
         return $password;
     }
     // Comment utiliser cette méthode sans refaire sans cesse un hashage ? Méthode inutilisée.
-    public function passwordMatch(string $plainPwd): bool
+    public function passwordMatch(?string $plainPwd): bool
     {
         $hash = $this->getHashedPassword();
         if (password_verify($plainPwd, $hash)){

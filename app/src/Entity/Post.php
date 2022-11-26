@@ -12,7 +12,10 @@ class Post extends BaseEntity
     private int | null $id;
     private string | null $content;
     private int | null $author;
+    private string | null $author_name;
     private string | null $title;
+    private int | null $articleStatus;
+    private string | null $image;
 
     /**
      * @return int
@@ -29,6 +32,63 @@ class Post extends BaseEntity
     public function setId(int | null $id): Post
     {
         $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getArticleStatus(): int | null
+    {
+        return $this->articleStatus;
+    }
+
+    /**
+     * @param int $articleStatus
+     * @return Post
+     */
+    public function setArticleStatus(int | null $articleStatus): Post
+    {
+        $this->articleStatus = $articleStatus;
+        return $this;
+    }
+
+
+    /**
+     * @return string|null
+     */
+    public function getAuthor_name(): string | null
+    {
+        return $this->author_name;
+    }
+
+    /**
+     * @param string|null $author_name
+     * @return $this
+     */
+    public function setAuthor_name(string | null $author_name): Post
+    {
+        $this->author_name = $author_name;
+        return $this;
+    }
+
+
+    /**
+     * @return string|null
+     */
+    public function getImage(): string | null
+    {
+        return $this->image;
+    }
+
+
+    /**
+     * @param string|null $image
+     * @return $this
+     */
+    public function setImage(string | null $image): Post
+    {
+        $this->image = $image;
         return $this;
     }
 

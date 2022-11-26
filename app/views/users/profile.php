@@ -21,4 +21,5 @@ if($userData) {
 <h1>Profile</h1>
 
 <a href="/backoffice" >espace admin</a>
+<a href="/writer">espace de rédaction</a>
 
