@@ -32,6 +32,7 @@ if(isset($_GET['error']) && ($_GET['error'] === 'no-user')) {
 ?>
 
 <h1>HOME</h1>
+<a href="/deconnect">Deconnection</a>
 <h1 class="text-3xl font-bold underline text-clifford">
     Hello world!
 </h1>

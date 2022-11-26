@@ -16,7 +16,13 @@ class LoginController extends AbstractController
             'https://fonts.googleapis.com/icon?family=Material+Icons'
         ];
         $scripts = ['/public/lib/materialize/js/materialize.js',   '/public/js/script.js'];
-        $this->render("login.php", [], "Login page", $links, $scripts);
+        $this->render("login.php", [], "login", $links, $scripts);
+    }
+
+    #[Route('/profile', name: "profile", methods: ["GET"])]
+    public function directProfilePage()
+    {
+        $this->redirect("profile.php");
     }
 
     #[Route('/login', name: "login", methods: ["POST"])]
@@ -24,11 +30,10 @@ class LoginController extends AbstractController
     {
         $formUsername = $_POST['username'];
         $formPwd = $_POST['password'];
-        $userId = $_SESSION['userId'];
+        $_SESSION['user'] = $formUsername;
 
         $userManager = new UserManager(new PDOFactory());
-//        $user = $userManager->getByUsername($formUsername);
-        $user = $userManager->getByUserid($userId);
+        $user = $userManager->getByUsername($formUsername);
 
         if (!$user) {
             header("Location: /?error=no-user");
@@ -59,4 +64,12 @@ class LoginController extends AbstractController
         header("Location: /?error=notfound");
         exit;
     }
+
+    #[Route('/deconnect', name: "deconnexion", methods: ["GET"])]
+    public function deconnect()
+    {
+        $this->redirect('deconnexion.php');
+        exit();
+    }
+
 }

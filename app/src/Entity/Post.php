@@ -9,7 +9,7 @@ namespace Gladblog\Entity;
 
 class Post extends BaseEntity
 {
-    private int | null $id;
+    private int | null $postid;
     private string | null $content;
     private int | null $author;
     private string | null $author_name;
@@ -20,18 +20,18 @@ class Post extends BaseEntity
     /**
      * @return int
      */
-    public function getId(): int | null
+    public function getIdpost(): int | null
     {
-        return $this->id;
+        return $this->postid;
     }
 
     /**
-     * @param int $id
+     * @param int $postid
      * @return Post
      */
-    public function setId(int | null $id): Post
+    public function setIdpost(int | null $postid): Post | null
     {
-        $this->id = $id;
+        $this->postid = $postid;
         return $this;
     }
 

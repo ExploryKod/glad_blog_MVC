@@ -14,7 +14,6 @@ class PostManager extends BaseManager
     public function getAllPosts(): array
     {
         $query = $this->pdo->query("select * from posts");
-
         $posts = [];
 
         while ($data = $query->fetch(\PDO::FETCH_ASSOC)) {
@@ -22,25 +21,6 @@ class PostManager extends BaseManager
         }
 
         return $posts;
-    }
-
-    public function getPostbyauthor(int $author): array
-    {
-        if(isset($author)) {
-            $query = $this->pdo->query("SELECT * FROM posts WHERE `author`= :author");
-
-            $query->bindValue("author", $author, \PDO::PARAM_STR);
-            $query->execute();
-            $posts = [];
-
-            while ($data = $query->fetch(\PDO::FETCH_ASSOC)) {
-                $posts[] = new Post($data);
-            }
-
-            return $posts;
-        }
-
-        return [];
     }
 
     public function insertPost(string $title, string $content): array
@@ -80,9 +60,22 @@ class PostManager extends BaseManager
 
     }
 
-    public function deletePost(int $id){
-        $dropPostReq = $this->pdo->prepare("DELETE FROM posts WHERE id = :id");
-        $dropPostReq->bindValue("id", $id, \PDO::PARAM_STR);
-        $dropPostReq->execute();
+    public function getPost($post_id) {
+        $getPostReq = $this->pdo->prepare("SELECT * FROM posts WHERE idpost = :post_id");
+        $getPostReq->execute([
+            'post_id' => $post_id
+        ]);
+        $readPosts = [];
+        while ($data = $getPostReq->fetch(\PDO::FETCH_ASSOC)) {
+            $readPosts[] = new Post($data);
+        }
+        return $readPosts;
+    }
+
+    public function deletePost($post_id){
+        $dropPostReq = $this->pdo->prepare("DELETE FROM posts WHERE idpost = :post_id");
+        $dropPostReq->execute([
+            'post_id' => $post_id
+        ]);
     }
 }

@@ -1,10 +1,4 @@
 <h1>Writer</h1>
-<?php
-
-if(isset($myPost)) {
-    var_dump($myPost);
-}
-?>
 <section class="mt-5 row">
 
     <article class="col-sm-6 container-fluid d-flex align-items-start justify-content-center">
@@ -127,13 +121,20 @@ if(isset($myPost)) {
             <tbody>
             <?php foreach($posts as $a_post): ?>
                 <tr>
-                    <th scope="row"><?php echo $a_post->getId() ?></th>
+                    <th scope="row"><?php echo $a_post->getIdpost() ?></th>
                     <td><?php echo $a_post->getTitle() ?></td>
-                    <td><a href='readPost.php?id=<?php echo $a_post->getAuthor() ?>'>Consulter ce post </a></td>
+                    <td><a href='/read?post_id=<?php echo $a_post->getIdpost() ?>'>Consulter ce post </a></td>
+                    <td><a href='/deletepost?post_id=<?php echo $a_post->getIdpost() ?>'>Supprimmer ce post</a></td>
                     <td></td>
                 </tr>
             <?php endforeach ?>
             </tbody>
         </table>
     </article>
+
+    <?php
+    if(isset($postOne)) {
+        var_dump($postOne);
+    }
+     ?>
 </section>

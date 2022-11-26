@@ -17,6 +17,12 @@ abstract class AbstractController
         call_user_func_array([$this, $action], $params);
     }
 
+    public function redirect($view) {
+        $view = dirname(__DIR__, 2) . '/views/' . $view;
+        require_once $view;
+        exit();
+    }
+
     /**
      * @param string $view
      * @param array $args
@@ -58,7 +64,6 @@ abstract class AbstractController
         }
 
         unset($args);
-
         require_once $view;
         $_pageContent = ob_get_clean();
         $_pageTitle = $title;
@@ -66,7 +71,6 @@ abstract class AbstractController
         $_pageRelativeLinks = $relativePublicLink;
         $_pageRelativeScripts = $relativePublicScript;
         require_once $base;
-
-        exit;
+        exit();
     }
 }

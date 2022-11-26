@@ -69,12 +69,9 @@ class PostController extends AbstractController
 
         $styleLinks = ['/public/css/style.css',
             '/public/css/base.css',
-            //'/public/lib/materialize/css/materialize.css',
             'https://fonts.googleapis.com/icon?family=Material+Icons'
         ];
-        $scripts = [
-            //'/public/lib/materialize/js/materialize.js'
-        ];
+        $scripts = [];
 
         $this->render("users/writer.php", [
             'posts' => $posts,
@@ -117,5 +114,51 @@ class PostController extends AbstractController
             header('Location: /writer?error=submitnull');
             exit();
         }
+    }
+
+    #[Route('/read', name: "read", methods: ["GET"])]
+    public function read_single_post()
+    {
+
+            $post_id = intval($_GET['post_id']);
+            $postManager = new PostManager(new PDOFactory());
+            $thePost = $postManager->getPost($post_id);
+            $posts = $postManager->getAllPosts();
+//            $posts = $postManager->getPostbyid($post_id);
+
+            $styleLinks = ['/public/css/style.css',
+                '/public/css/base.css',
+                'https://fonts.googleapis.com/icon?family=Material+Icons'
+            ];
+            $scripts = [
+
+            ];
+
+            $this->render("users/read.php", [
+                'posts' => $posts,
+                'thePost' => $thePost,
+                'tailwind' => [false, '/public/js/tailwind.js']
+            ], "Espace de lecture", $styleLinks, $scripts);
+
+    }
+
+    #[Route('/deletepost', name: "deletepost", methods: ["GET"])]
+    public function delete_single_post()
+    {
+
+        $post_id = intval($_GET['post_id']);
+        $postManager = new PostManager(new PDOFactory());
+        $postManager->deletePost($post_id);
+        $posts = $postManager->getAllPosts();
+
+        $styleLinks = ['/public/css/style.css', '/public/css/base.css'];
+        $scripts = [];
+
+        $this->render("users/writer.php", [
+            'posts' => $posts,
+            'message' => 'Le post n°'.$post_id.' a bien été supprimé.',
+            'tailwind' => [false, '/public/js/tailwind.js']
+        ], "Espace d'écriture", $styleLinks, $scripts);
+
     }
 }

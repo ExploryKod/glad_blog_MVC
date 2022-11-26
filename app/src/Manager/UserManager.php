@@ -1,6 +1,5 @@
 <?php
 namespace Gladblog\Manager;
-session_start();
 use Gladblog\Entity\User;
 
 class UserManager extends BaseManager
