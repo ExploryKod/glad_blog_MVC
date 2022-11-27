@@ -1,8 +1,5 @@
 <?php
-session_start();
-if(!isset($_SESSION['user'])){
-    var_dump("not session user");
-}
+
 if($message) {
     echo 'message:';
     var_dump($message);
@@ -15,15 +12,19 @@ if($message) {
     var_dump($hash);
 }
 
-
-
-
-if($userData) {
-    var_dump($userData);
-}
-?>
-<h1>Profile</h1>
+if(isset($userData)) { ?>
+    <h1>Bonjour <?= $userData ?></h1>
+<?php } else { ?>
+    <h1>Profile</h1>
+<?php } ?>
+<a href="/upgrade">Devenir administrateur</a>
 <a href="/deconnect">Se deconnecter</a>
-<a href="/backoffice" >espace admin</a>
+<?php if(isset($status)) {
+    if($status === 1) { ?>
+    <a href="/backoffice" >espace d'administration</a>
+    <?php }
+}?>
+
+
 <a href="/writer">espace de rédaction</a>
 

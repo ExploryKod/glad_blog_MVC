@@ -10,12 +10,8 @@ class LoginController extends AbstractController
     #[Route('/login', name: "login", methods: ["GET"])]
     public function directLoginPage()
     {
-        $links = ['/public/css/style.css',
-            '/public/css/base.css',
-            '/public/lib/materialize/css/materialize.css',
-            'https://fonts.googleapis.com/icon?family=Material+Icons'
-        ];
-        $scripts = ['/public/lib/materialize/js/materialize.js',   '/public/js/script.js'];
+        $links = ["/public/css/login.css"];
+        $scripts = [];
         $this->render("login.php", [], "login", $links, $scripts);
     }
 
@@ -34,6 +30,8 @@ class LoginController extends AbstractController
 
         $userManager = new UserManager(new PDOFactory());
         $user = $userManager->getByUsername($formUsername);
+        $userId = $userManager->getByUsername($formUsername)->getId();
+        $_SESSION['userId'] = $userId;
 
         if (!$user) {
             header("Location: /?error=no-user");
@@ -41,16 +39,13 @@ class LoginController extends AbstractController
         }
 
         if ($user->passwordMatch($formPwd))  {
-            $links = ['/public/css/style.css',
-                '/public/css/base.css',
-                '/public/lib/materialize/css/materialize.css',
-                'https://fonts.googleapis.com/icon?family=Material+Icons'
-            ];
-            $scripts = ['/public/lib/materialize/js/materialize.js',  '/public/js/script.js'];
+            $links = [];
+            $scripts = [];
 
             $this->render("users/profile.php", [
                 "message" => "hash est vérifié",
-                "userData" => $userManager->getByUsername($formUsername),
+                "userData" => $userManager->getByUsername($formUsername)->getUsername(),
+                "status" => $userManager->getByUsername($formUsername)->getStatus(),
                 "hash" => $userManager->getByUsername($formUsername)->getHashedPassword(),
                 "data" => $_POST
             ],
@@ -68,8 +63,15 @@ class LoginController extends AbstractController
     #[Route('/deconnect', name: "deconnexion", methods: ["GET"])]
     public function deconnect()
     {
-        $this->redirect('deconnexion.php');
-        exit();
+        // Détruire la session.
+        if (session_destroy()) {
+            // Redirection vers la page de connexion
+            $links = ["/public/css/login.css"];
+            $scripts = [];
+            $this->render("login.php", [], "login", $links, $scripts);
+            exit();
+        }
+
     }
 
 }

@@ -66,6 +66,7 @@ abstract class AbstractController
         unset($args);
         require_once $view;
         $_pageContent = ob_get_clean();
+        $_header =
         $_pageTitle = $title;
         $_pageStyleLinks = $styleLink;
         $_pageRelativeLinks = $relativePublicLink;

@@ -22,15 +22,11 @@ class RegisterController extends AbstractController
 
              // Si l'utilisateur n'est pas déjà dans la base car getByUserName rend null donc il rend false
                 $userManager->insertUser($password, $username);
-                $links = ['/public/css/style.css',
-                    '/public/css/base.css',
-                    '/public/lib/materialize/css/materialize.css',
-                    'https://fonts.googleapis.com/icon?family=Material+Icons'
-                ];
-                $scripts = ['/public/lib/materialize/js/materialize.js'];
-                $this->render("users/profile.php", [
+                $links = ['/public/css/login.css'];
+                $scripts = [];
+                $this->render("login.php", [
                     'data' => $_POST
-                ], "Votre profile", $links, $scripts);
+                ], "register", $links, $scripts);
 
             } else {
                 // getByUserName est true (rend une valeur) donc ...

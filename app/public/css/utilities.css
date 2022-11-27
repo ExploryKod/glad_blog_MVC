@@ -1,0 +1,6 @@
+@import "variables.css";
+
+/* There is no cursor property in boostrap - as we don't use scss we generate here a custom css class */
+.custom-pointer {
+    cursor:pointer;
+}

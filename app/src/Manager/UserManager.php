@@ -76,6 +76,15 @@ class UserManager extends BaseManager
         $query->execute();
     }
 
+    public function setAdminRights(int $userId, string $status)  {
+
+        $query = $this->pdo->prepare("UPDATE user SET status = :status WHERE id=:userId ");
+        $query->execute([
+            'status' => $status,
+            'userId' => $userId
+        ]);
+    }
+
     /**
      * @param int|null $userId
      * @param string|null $username

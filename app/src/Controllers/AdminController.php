@@ -7,22 +7,52 @@ use Gladblog\Route\Route;
 
 class AdminController extends AbstractController
 {
+
+    #[Route('/upgrade', name: "upgrade", methods: ["GET"])]
+    public function becomeAdmin() {
+        $styleLinks = [];
+        $scripts = [];
+        $this->render("admin/admin_test.php", [
+            'tailwind' => [false, '/public/js/tailwind.js']
+        ], "backoffice", $styleLinks, $scripts);
+
+    }
+
+    #[Route('/register_admin', name: "exam", methods: ["POST"])]
+    public function examAdmin() {
+        $styleLinks = [];
+        $scripts = [];
+        $userId = intval($_SESSION['userId']);
+        $badge = 'admin';
+        $answer = htmlspecialchars($_POST['answer']);
+        if(isset($userId))  {
+            if($answer === 'blanc') {
+                $userManager = new UserManager(new PDOFactory());
+                $userManager->setAdminRights($userId, $badge);
+                $this->render("admin/backoffice.php", [
+                    'message' => 'Bienvenue dans le cercle des administrateurs',
+                    'tailwind' => [true, '/public/js/tailwind.js']
+                ], "backoffice", $styleLinks, $scripts);
+            } else {
+                $this->render("users/profile.php", [
+                    'message' => 'Vous n\' avez pas su répondre, vous n\' êtes pas admis',
+                    'tailwind' => [false, '/public/js/tailwind.js']
+                ], "backoffice", $styleLinks, $scripts);
+            }
+        } else {
+            $links = ["/public/css/login.css"];
+            $this->render("login.php", [], "login", $links, $scripts);
+            exit();
+        }
+    }
+
     #[Route('/backoffice', name: "backOffice", methods: ["GET"])]
     public function accessBackoffice() {
 
         $userManager = new UserManager(new PDOFactory());
         $users = $userManager->getAllUsers();
-
-        $styleLinks = [
-            '/public/css/style.css',
-            '/public/css/base.css',
-//            '/public/lib/materialize/css/materialize.css',
-            'https://fonts.googleapis.com/icon?family=Material+Icons'
-        ];
-        $scripts = [
-//            '/public/lib/materialize/js/materialize.js',
-            '/public/js/script.js'];
-
+        $styleLinks = [];
+        $scripts = [];
         $this->render("admin/backoffice.php", [
             "message" => '',
             "userInfos" => $users,
