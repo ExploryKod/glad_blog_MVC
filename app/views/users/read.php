@@ -1,14 +1,3 @@
-<?php
-echo '<pre>';
-var_dump($_GET['post_id']);
-var_dump($_SESSION['userStatus']);
-echo '<pre>';?>
-<?php
-
-if(isset($comment)) {
-var_dump($comment[0]->getContent_comment());
-} ?>
-
 <main class="container-fluid position-relative">
     <section class="row mt-5 d-flex align-items-center justify-content-center">
         <div class="col-12 w-50 card shadow p-5 bg-white" style="width: 30rem;">
