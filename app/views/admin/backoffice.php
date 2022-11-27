@@ -14,6 +14,11 @@
     } ?>
 </div>
 <main class="container-fluid position-relative">
+    <?php if(isset($message) && !empty($message)): ?>
+        <div id="fading-alert" class="alert alert-info shadow position-absolute top-10 start-50 translate-middle upper-z-index">
+            <p class="text-center fw-bold fs-5"><?= $message ?></p>
+        </div>
+    <?php endif ?>
     <section class="container-fluid custom-hero-container upper-z-index">
         <div class="d-flex justify-content-center align-item-center py-5 p-0">
             <div class="p-sm-5 pb-sm-5 mx-sm-5 bg-custom-secundary-transparent position-relative rounded-3">

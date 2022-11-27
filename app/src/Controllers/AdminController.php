@@ -1,6 +1,8 @@
 <?php
 namespace Gladblog\Controllers;
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 use Gladblog\Factory\PDOFactory;
 use Gladblog\Manager\UserManager;
 use Gladblog\Route\Route;
@@ -12,9 +14,7 @@ class AdminController extends AbstractController
     public function becomeAdmin() {
         $styleLinks = [];
         $scripts = [];
-        $this->render("admin/admin_test.php", [
-            'tailwind' => [false, '/public/js/tailwind.js']
-        ], "backoffice", $styleLinks, $scripts);
+        $this->render("admin/admin_test.php", [], "backoffice", $styleLinks, $scripts);
 
     }
 
@@ -27,6 +27,7 @@ class AdminController extends AbstractController
         $answer = htmlspecialchars($_POST['answer']);
         if(isset($userId))  {
             if($answer === 'blanc') {
+                $_SESSION['userStatus'] = 'admin';
                 $userManager = new UserManager(new PDOFactory());
                 $userManager->setAdminRights($userId, $badge);
                 $users = $userManager->getAllUsers();
@@ -34,7 +35,7 @@ class AdminController extends AbstractController
                     'message' => 'Bienvenue dans le cercle des administrateurs',
                     'userInfos' => $users,
                     'your_id' > $userId,
-                    'tailwind' => [true, '/public/js/tailwind.js']
+                    'tailwind' => [false, '/public/js/tailwind.js']
                 ], "backoffice", $styleLinks, $scripts);
             } else {
                 $this->render("users/profile.php", [
