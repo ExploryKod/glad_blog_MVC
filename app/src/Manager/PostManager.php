@@ -1,7 +1,4 @@
 <?php
-// Je veux ici requerir tous les post présent en base de donnée
-// Je requière les data des posts à mon entité Post.php
-
 namespace Gladblog\Manager;
 
 use Gladblog\Entity\Post;

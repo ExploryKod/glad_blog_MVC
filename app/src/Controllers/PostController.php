@@ -81,7 +81,7 @@ class PostController extends AbstractController
         }
     }
 
-    #[Route('/read', name: "read", methods: ["GET"])]
+    #[Route('/read', name: "read", methods: ["GET", "POST"])]
     public function read_single_post()
     {
             $post_id = intval($_GET['post_id']);
@@ -97,7 +97,8 @@ class PostController extends AbstractController
             $this->render("users/read.php", [
                 'comment' => $comment,
                 'posts' => $posts,
-                'thePost' => $thePost
+                'thePost' => $thePost,
+                'id_post' => $post_id,
             ], "Espace de lecture", $styleLinks, $scripts);
 
     }

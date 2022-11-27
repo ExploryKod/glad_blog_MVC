@@ -1,9 +1,15 @@
+<?php
+echo '<pre>';
+var_dump($_GET['post_id']);
+var_dump($_SESSION['userStatus']);
+echo '<pre>';?>
+<?php
+
+if(isset($comment)) {
+var_dump($comment[0]->getContent_comment());
+} ?>
+
 <main class="container-fluid position-relative">
-    <?php if(isset($message) && !empty($message)): ?>
-        <div id="fading-alert" class="alert alert-info shadow position-absolute top-10 start-50 translate-middle upper-z-index">
-            <p class="text-center fw-bold fs-5"><?= $message ?></p>
-        </div>
-    <?php endif ?>
     <section class="row mt-5 d-flex align-items-center justify-content-center">
         <div class="col-12 w-50 card shadow p-5 bg-white" style="width: 30rem;">
                 <?php foreach($posts as $post) {
@@ -59,26 +65,23 @@
         </div>
     </div>
 
+
     <section  id="comments" class="container-fluid bg-light">
         <h2 class="fw-bold text-center fs-2"> Commentaires: </h2>
         <?php if(isset($comment)): ?>
-        <?php if(!empty($comment)): ?>
-        <div class="container-fluid d-flex flex-column">
-            <?php foreach($comment as $a_comment): ?>
-                <div class="d-flex flex-column">
-                    <h6 class="fs-6 fw-bold">Commentaire du <?= $a_comment->getPublish_date() ?></h6>
-                    <p class=""><?= $a_comment->getContent_comment() ?></p>
-                    <h5 class="fw-bold fs-6">Par <?= $a_comment->getAuthor_comment() ?></h5>
-                    <a href="/answer_comment?answer=<?= $a_comment->getComment_id() ?>" data-bs-toggle="modal" data-bs-target="#write-comment">Répondre</a>
-                    <?php if(isset($_SESSION['userStatus']) && $_SESSION['userStatus'] === 'admin'): ?>
-                    <a href="/delete_comment?delete_comment=<?= $a_comment->getComment_id ?>">Supprimer</a>
-                    <?php endif ?>
+            <?php if(!empty($comment)): ?>
+                <div class="container-fluid d-flex flex-column">
+                    <?php foreach($comment as $a_comment): ?>
+                        <div class="d-flex flex-column">
+                            <h6 class="fs-6 fw-bold">Commentaire du <?= $a_comment->getPublish_date() ?></h6>
+                            <p class=""><?= $a_comment->getContent_comment() ?></p>
+                            <h5 class="fw-bold fs-6">Par <?= $a_comment->getAuthor_comment() ?></h5>
+                        </div>
+                    <?php endforeach ?>
                 </div>
-            <?php endforeach ?>
-        </div>
-        <?php endif ?>
+            <?php endif ?>
         <?php else: ?>
-        <p class="fw-bold fs-4 text-center mt-5 mb-5 mx-auto"> Il n'y a pas encore de commentaires sur ce post</p>
+            <p class="fw-bold fs-4 text-center mt-5 mb-5 mx-auto"> Il n'y a pas encore de commentaires sur ce post</p>
         <?php endif ?>
     </section>
 

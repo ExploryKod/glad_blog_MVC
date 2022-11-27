@@ -1,11 +1,12 @@
 <?php
 namespace Gladblog\Controllers;
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 use Gladblog\Factory\PDOFactory;
 use Gladblog\Manager\CommentsManager;
 use Gladblog\Manager\PostManager;
 use Gladblog\Route\Route;
-// inutile:
-//use Gladblog\Controller\AbstractController;
 
 class CommentsController extends AbstractController
 {
