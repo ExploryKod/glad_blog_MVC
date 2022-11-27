@@ -1,15 +1,9 @@
-<?php
-echo '<pre>';
-var_dump($_GET['post_id']);
-var_dump($_SESSION['userStatus']);
-echo '<pre>';?>
-<?php
-
-if(isset($comment)) {
-var_dump($comment[0]->getContent_comment());
-} ?>
-
 <main class="container-fluid position-relative">
+    <?php if(isset($message) && !empty($message)): ?>
+        <div id="fading-alert" class="alert alert-info shadow position-absolute top-10 start-50 translate-middle upper-z-index">
+            <p class="text-center fw-bold fs-5"><?= $message ?></p>
+        </div>
+    <?php endif ?>
     <section class="row mt-5 d-flex align-items-center justify-content-center">
         <div class="col-12 w-50 card shadow p-5 bg-white" style="width: 30rem;">
                 <?php foreach($posts as $post) {

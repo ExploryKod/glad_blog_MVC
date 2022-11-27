@@ -1,15 +1,8 @@
 <?php ?>
-
 <div>
     <?php
-    echo "<pre>";
-    var_dump($userInfos);
-    echo "<pre>";
-    echo "+++++++++++++++++++++++++++";
     $array = [];
     foreach($userInfos as $userInfo) {
-        echo '------------------';
-
         $array[] = [
                     'userId' => $userInfo->getId(),
                    'username' => $userInfo->getUserName(),
@@ -18,10 +11,7 @@
                     'email' => $userInfo->getEmail(),
                    'birth_date' => $userInfo->getBirth_date(),
                    'status' => $userInfo->getStatus()];
-    }
-    echo 'array is :::::::::::::';
-    var_dump($array);
-    ?>
+    } ?>
 </div>
 <main class="container-fluid position-relative">
     <section class="container-fluid custom-hero-container upper-z-index">

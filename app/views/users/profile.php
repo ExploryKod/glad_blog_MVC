@@ -1,4 +1,3 @@
-<?php var_dump($_SESSION); ?>
 <main class="container-fluid position-relative m-0 p-0 gap-0">
     <?php if(isset($message) && !empty($message)): ?>
         <div id="fading-alert" class="alert alert-info shadow position-absolute top-10 start-50 translate-middle upper-z-index">
