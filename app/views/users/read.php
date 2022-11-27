@@ -1,8 +1,10 @@
 <?php
 echo '<pre>';
 var_dump($_GET['post_id']);
+var_dump($_SESSION['userStatus']);
 echo '<pre>';?>
 <?php
+
 if(isset($comment)) {
 var_dump($comment[0]->getContent_comment());
 } ?>
@@ -73,6 +75,10 @@ var_dump($comment[0]->getContent_comment());
                     <h6 class="fs-6 fw-bold">Commentaire du <?= $a_comment->getPublish_date() ?></h6>
                     <p class=""><?= $a_comment->getContent_comment() ?></p>
                     <h5 class="fw-bold fs-6">Par <?= $a_comment->getAuthor_comment() ?></h5>
+                    <a href="/answer_comment?answer=<?= $a_comment->getComment_id() ?>" data-bs-toggle="modal" data-bs-target="#write-comment">Répondre</a>
+                    <?php if(isset($_SESSION['userStatus']) && $_SESSION['userStatus'] === 'admin'): ?>
+                    <a href="/delete_comment?delete_comment=<?= $a_comment->getComment_id ?>">Supprimer</a>
+                    <?php endif ?>
                 </div>
             <?php endforeach ?>
         </div>
