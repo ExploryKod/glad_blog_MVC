@@ -10,6 +10,7 @@ class Comments extends BaseEntity
     private int $id_post;
     private ?int $id_upper_comment;
     private string | null $post_title;
+    private int | null $admin_comment;
 
     /**
      * @return string|null
@@ -42,7 +43,6 @@ class Comments extends BaseEntity
     {
         $this->admin_comment = $admin_comment;
     }
-    private int | null $admin_comment;
 
     /**
      * @return int
@@ -117,7 +117,7 @@ class Comments extends BaseEntity
     }
 
     /**
-     * @param int $idpost
+     * @param int $id_post
      */
     public function setId_post(int $id_post): void
     {

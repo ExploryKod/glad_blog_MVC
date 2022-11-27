@@ -4,11 +4,12 @@ var_dump($_GET['post_id']);
 echo '<pre>';?>
 <?php
 if(isset($comment)) {
-var_dump($comment);
+var_dump($comment[0]->getContent_comment());
 } ?>
+
 <main class="container-fluid position-relative">
     <section class="row mt-5 d-flex align-items-center justify-content-center">
-        <div class="col-12 w-50 card shadow p-5 bg-white" style="width: 18rem;">
+        <div class="col-12 w-50 card shadow p-5 bg-white" style="width: 30rem;">
                 <?php foreach($posts as $post) {
                     if($post->getIdpost() === intval($_GET['post_id'])) { ?>
                         <div class="container">
@@ -23,6 +24,7 @@ var_dump($comment);
                             <div class="d-flex justify-content-center flex-col gap-2">
                                 <a href="/profile" class="btn btn-primary btn-sm">Retour à votre profile</a>
                                 <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#write-comment">Commentez l'article</button>
+                                <a href="#comments" class="btn btn-sm btn-warning">Voir les commentaires</a>
                             </div>
                          </div>
                   <?php  } ?>
@@ -60,4 +62,24 @@ var_dump($comment);
             </div>
         </div>
     </div>
+
+    <section  id="comments" class="container-fluid bg-light">
+        <h2 class="fw-bold text-center fs-2"> Commentaires: </h2>
+        <?php if(isset($comment)): ?>
+        <?php if(!empty($comment)): ?>
+        <div class="container-fluid d-flex flex-column">
+            <?php foreach($comment as $a_comment): ?>
+                <div class="d-flex flex-column">
+                    <h6 class="fs-6 fw-bold">Commentaire du <?= $a_comment->getPublish_date() ?></h6>
+                    <p class=""><?= $a_comment->getContent_comment() ?></p>
+                    <h5 class="fw-bold fs-6">Par <?= $a_comment->getAuthor_comment() ?></h5>
+                </div>
+            <?php endforeach ?>
+        </div>
+        <?php endif ?>
+        <?php else: ?>
+        <p class="fw-bold fs-4 text-center mt-5 mb-5 mx-auto"> Il n'y a pas encore de commentaires sur ce post</p>
+        <?php endif ?>
+    </section>
+
 </main>

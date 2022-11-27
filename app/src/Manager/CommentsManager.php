@@ -35,8 +35,8 @@ class CommentsManager extends BaseManager
 
     public function insertNewComment(string $author_comment, string $content_comment, int $id_post, string $post_title, int $admin_comment): array
     {
-        $query = $this->pdo->prepare("INSERT INTO comments (author_comment, content_comment, id_post, post_title, admin_comment)
-                                                VALUES (:author_comment, :content_comment, :id_post, :post_title, :admin_comment) LIMIT 1");
+        $query = $this->pdo->prepare("INSERT INTO comments (author_comment, content_comment, id_post, post_title, admin_comment, publish_date)
+                                                VALUES (:author_comment, :content_comment, :id_post, :post_title, :admin_comment, NOW()) LIMIT 1");
         $query->execute([
             'author_comment' => $author_comment,
             'content_comment' => $content_comment,
