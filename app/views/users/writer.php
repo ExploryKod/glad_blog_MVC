@@ -6,26 +6,6 @@
             <section class="shadow p-5 bg-light">
                 <div class="mb-3">
                     <label class="form-label" for="title">Titre du post: <span>*</span> :</label>
-                    <input class="form-control"  id="title" type="text" name="title" maxlength="250" required >
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label" for="content">Texte du post: <span>*</span> :</label>
-                    <textarea class="form-control" id="content" name="content"  cols="30" rows="4" placeholder="Entrez votre texte" onfocus="this.onfocus=null;" maxlength="950" required ></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <input class="btn btn-primary btn-lg" type="submit" value="Enregistrer l'article" name="register_article">
-                </div>
-            </section>
-        </form>
-    </article>
-
-    <article class="col-sm-6 container-fluid d-flex align-items-start justify-content-center">
-        <form action="/register_complex_post" method="POST">
-            <section class="shadow p-5 bg-light">
-                <div class="mb-3">
-                    <label class="form-label" for="title">Titre du post: <span>*</span> :</label>
                     <input class="form-control"  id="title" type="text" name="title" maxlength="250" value="Pas de titre">
                 </div>
 
@@ -38,6 +18,9 @@
                     <label class="form-label" for="author_name">Votre prénom et nom: <span>*</span> :</label>
                     <input class="form-control"  id="author_name" type="text" name="author_name" maxlength="250" value="Anonyme">
                 </div>
+
+                <input id="prodId" name="userId" type="hidden" value="<?= $_SESSION['userId']?> >
+
 
                 <div class="mb-3">
                     <label class="form-label" for="image">Votre photo (copier le lien depuis internet) <span>*</span> :</label>
@@ -72,7 +55,7 @@
        ?>
 
         <?php
-        $your_id = 20;
+
         if(isset($your_id)) { ?>
             <h2>Liste de vos articles: </h2>
             <table class="table">
@@ -98,13 +81,14 @@
                             <td></td>
                         </tr>
                     <?php endif ?>
+                    <p>Vous n'avez pas de posts</p>
                 <?php endforeach ?>
                 </tbody>
             </table>
         <?php } else {  ?>
 
             <div class="alert alert-success mx-auto my-2 w-75">
-                <p class="fs-6 fw-bold p-3"> Vous n'avez pas encore créé d'articles. Libérez votre créativité, écrivez un article pour le montrer au monde.</p>
+                <p class="fs-6 fw-bold p-3"> Vous n'avez pas encore créé d'articles identifiés avec vous en auteur. Libérez votre créativité, écrivez un article pour le montrer au monde.</p>
             </div>
 
         <?php }  ?>

@@ -4,3 +4,7 @@
 .custom-pointer {
     cursor:pointer;
 }
+/* To impose a very high z-index as bootstrap is not optimal */
+.upper-z-index {
+   z-index:999!important;
+}

@@ -137,44 +137,6 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getGender(): ?string
-    {
-        return $this->gender;
-    }
-
-    /**
-     * @param string $gender
-     * @return User
-     */
-    public function setGender(?string $gender): User
-    {
-        $this->gender = $gender;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRoles(): ?array
-    {
-        $roles = $this->roles;
-        $roles[] = "ROLE_USER";
-        return $roles;
-    }
-
-    /**
-     * @param array $roles
-     * @return User
-     */
-    public function setRoles(?array $roles): User
-    {
-        $this->roles = $roles;
-        return $this;
-    }
-
     public function setPassword(string $password): User
     {
         $this->password = $password;

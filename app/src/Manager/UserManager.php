@@ -66,13 +66,20 @@ class UserManager extends BaseManager
      * @param string|null $username
      * @return void
      */
-    public function insertUser(string | null $password, string | null $username) : void
+    public function insertUser(string | null $password, string | null $username, string | null $first_name, string | null $last_name, string | null $birth_date, string | null $email) : void
     {
         $cost = ['cost' => 12];
         $password = $this->makeHashedPassword($password, $cost);
-        $query = $this->pdo->prepare("INSERT INTO user (password, username) VALUES (:password, :username)");
+        $status = 'user';
+        $query = $this->pdo->prepare("INSERT INTO user (password, username, first_name, last_name, email, birth_date, status, creation_date) 
+                                            VALUES (:password, :username, :first_name, :last_name, :email, :birth_date, :status, NOW())");
         $query->bindValue("password", $password, \PDO::PARAM_STR);
         $query->bindValue("username", $username, \PDO::PARAM_STR);
+        $query->bindValue("first_name", $first_name, \PDO::PARAM_STR);
+        $query->bindValue("last_name", $last_name, \PDO::PARAM_STR);
+        $query->bindValue("email", $email, \PDO::PARAM_STR);
+        $query->bindValue("birth_date", $birth_date, \PDO::PARAM_STR);
+        $query->bindValue("status", $status, \PDO::PARAM_STR);
         $query->execute();
     }
 

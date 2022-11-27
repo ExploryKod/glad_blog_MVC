@@ -1,13 +1,13 @@
 <?php
 
-if($message) {
+if(isset($message)) {
     echo 'message:';
     var_dump($message);
-} elseif ($data) {
+} elseif (isset($data)) {
     echo '<pre>';
     var_dump($data);
     echo '</pre>';
-} elseif ($hash) {
+} elseif (isset($hash)) {
     echo'---------hash:';
     var_dump($hash);
 }
@@ -17,14 +17,14 @@ if(isset($userData)) { ?>
 <?php } else { ?>
     <h1>Profile</h1>
 <?php } ?>
-<a href="/upgrade">Devenir administrateur</a>
-<a href="/deconnect">Se deconnecter</a>
+<a class="btn btn-success" role="button" href="/upgrade">Devenir administrateur</a>
+
 <?php if(isset($status)) {
-    if($status === 1) { ?>
+    if($status === 'admin') { ?>
     <a href="/backoffice" >espace d'administration</a>
     <?php }
 }?>
 
 
-<a href="/writer">espace de rédaction</a>
+<a class="btn btn-success" role="button" href="/writer"> Rédiger un post </a>
 

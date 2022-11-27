@@ -17,12 +17,6 @@ abstract class AbstractController
         call_user_func_array([$this, $action], $params);
     }
 
-    public function redirect($view) {
-        $view = dirname(__DIR__, 2) . '/views/' . $view;
-        require_once $view;
-        exit();
-    }
-
     /**
      * @param string $view
      * @param array $args
@@ -31,6 +25,7 @@ abstract class AbstractController
      */
     public function render(string $view, array $args = [], string $title = "Document", array $styleLinks = [], array $styleScripts = [])
     {
+        $header = dirname(__DIR__, 2) . '/views/header.php';
         $view = dirname(__DIR__, 2) . '/views/' . $view;
         $base = dirname(__DIR__, 2) . '/views/base.php';
         $styleLink = [];
@@ -64,9 +59,16 @@ abstract class AbstractController
         }
 
         unset($args);
+        $profilePage = ['',''];
+        $connexion = ['Se connecter','/login'];
+        if(!empty($_SESSION['userId'])) {
+            $connexion[0] = 'Se déconnecter';
+            $connexion[1] = '/deconnect';
+            $profilePage = ['Mon espace', '/profile'];
+        }
+        require_once $header;
         require_once $view;
         $_pageContent = ob_get_clean();
-        $_header =
         $_pageTitle = $title;
         $_pageStyleLinks = $styleLink;
         $_pageRelativeLinks = $relativePublicLink;

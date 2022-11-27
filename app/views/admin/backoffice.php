@@ -11,6 +11,7 @@
         echo '------------------';
 
         $array[] = [
+                    'userId' => $userInfo->getId(),
                    'username' => $userInfo->getUserName(),
                    'first_name' => $userInfo->getFirst_name(),
                    'last_name' => $userInfo->getLast_name(),
@@ -22,17 +23,20 @@
     var_dump($array);
     ?>
 </div>
+<div class="container">
+    <h2>Liste des utilisateurs: </h2>
+    <?php  foreach($array as $arr) { ?>
+        <ul class="flex flex-row gap-5">
+            <?php  foreach($arr as $i) { ?>
+                <?php if(!empty($i)): ?>
+                    <li><?= $i ?></li>
+                <?php endif ?>
 
-<?php  foreach($array as $arr) { ?>
-    <ul>
-    <?php  foreach($arr as $i) { ?>
-    <?php if(!empty($i)): ?>
-    <li><?= $i ?></li>
-    <?php endif ?>
+            <?php } ?>
+        </ul>
+    <?php } ?>
+</div>
 
-<?php } ?>
-    </ul>
-<?php } ?>
 <div class="container pink">
     <div class="row">
         <div class="col s6 m5">

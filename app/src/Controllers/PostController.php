@@ -45,18 +45,11 @@ class PostController extends AbstractController
          header('Location: /writer?success=deletedpost');
      }
 
-    $styleLinks = ['/public/css/style.css',
-        '/public/css/base.css',
-        //'/public/lib/materialize/css/materialize.css',
-        //'https://fonts.googleapis.com/icon?family=Material+Icons'
-    ];
-    $scripts = [
-        //'/public/lib/materialize/js/materialize.js'
-    ];
+    $styleLinks = [];
+    $scripts = [];
 
     $this->render("users/writer.php", [
         'posts' => $posts ?? null,
-        'myPost' => $myPosts ?? null,
         'tailwind' => [false, '/public/js/tailwind.js']
     ], "Espace d'écriture", $styleLinks, $scripts);
     }
@@ -67,10 +60,7 @@ class PostController extends AbstractController
         $showAllPosts = new PostManager(new PDOFactory());
         $posts = $showAllPosts->getAllPosts();
 
-        $styleLinks = ['/public/css/style.css',
-            '/public/css/base.css',
-            'https://fonts.googleapis.com/icon?family=Material+Icons'
-        ];
+        $styleLinks = [];
         $scripts = [];
 
         $this->render("users/writer.php", [
@@ -79,25 +69,9 @@ class PostController extends AbstractController
         ], "Espace d'écriture", $styleLinks, $scripts);
     }
 
-     #[Route('/register_post', name: "writer", methods: ["POST"])]
-     public function register_post()
-     {
-           if(isset($_POST['register_article'])) {
 
-                $postManager = new PostManager(new PDOFactory());
-                $title = filter_input(INPUT_POST, 'title');
-                $content = filter_input(INPUT_POST, 'content');
-                $postManager->insertPost($title, $content);
-                header('Location: /writer?success=newarticle');
-                exit();
-           } else   {
-           header('Location: /writer?error=submitnull');
-           exit();
-           }
-     }
-
-    #[Route('/register_complex_post', name: "writer", methods: ["POST"])]
-    public function register_complex_post()
+    #[Route('/register_post', name: "writer", methods: ["POST"])]
+    public function register_post()
     {
         if(isset($_POST['register_article'])) {
 
@@ -106,8 +80,9 @@ class PostController extends AbstractController
             $content = filter_input(INPUT_POST, 'content');
             $author_name = filter_input(INPUT_POST, 'author_name');
             $article_status = filter_input(INPUT_POST, 'article_status');
+            $authorId = filter_input(INPUT_POST, 'userId');
             $image = filter_input(INPUT_POST, 'image');
-            $postManager->insertComplexPost($title, $content, $author_name, $article_status, $image);
+            $postManager->insertComplexPost($title, $content, $author_name, $article_status, $image, $authorId);
             header('Location: /writer?success=newarticle');
             exit();
         } else   {
@@ -124,15 +99,9 @@ class PostController extends AbstractController
             $postManager = new PostManager(new PDOFactory());
             $thePost = $postManager->getPost($post_id);
             $posts = $postManager->getAllPosts();
-//            $posts = $postManager->getPostbyid($post_id);
 
-            $styleLinks = ['/public/css/style.css',
-                '/public/css/base.css',
-                'https://fonts.googleapis.com/icon?family=Material+Icons'
-            ];
-            $scripts = [
-
-            ];
+            $styleLinks = [];
+            $scripts = [];
 
             $this->render("users/read.php", [
                 'posts' => $posts,
@@ -151,7 +120,7 @@ class PostController extends AbstractController
         $postManager->deletePost($post_id);
         $posts = $postManager->getAllPosts();
 
-        $styleLinks = ['/public/css/style.css', '/public/css/base.css'];
+        $styleLinks = [];
         $scripts = [];
 
         $this->render("users/writer.php", [

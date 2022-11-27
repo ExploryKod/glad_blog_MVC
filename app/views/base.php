@@ -16,6 +16,7 @@
         <link href="/public/css/variables.css" rel="stylesheet">
         <link href="/public/css/utilities.css" rel="stylesheet">
         <link href="/public/css/hero.css" rel="stylesheet">
+        <link href="/public/css/fade.css" rel="stylesheet">
 
     <?php } ?>
     <title><?= $_pageTitle; ?></title>
@@ -29,51 +30,18 @@ echo '<pre> --- Session';
 var_dump($_SESSION);
 echo '</pre>';
 ?>
-<header>
-    <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled">Disabled</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <section class="container-fluid custom-hero-container">
-        <div class="d-flex justify-content-center align-item-center py-5 p-0">
-            <div class="p-sm-5 pb-sm-5 mx-sm-5 bg-custom-secundary-transparent position-relative rounded-3">
-                <div>
-                    <h1 class="text-white text-center fs-1 pt-3">Bienvenue sur gladBlog</h1>
-                    <h2 class="text-white text-center fs-3">Ecrivez et partagez!</h2>
-                </div>
-            </div>
-        </div>
-    </section>
-</header>
+<?php if(isset($_headerContent)): ?>
+<?= $_headerContent; ?>
+<?php endif ?>
 <?= $_pageContent; ?>
 
 <?php if(isset($tailwind) && $tailwind){ ?>
     <?php foreach($_pageRelativeScripts as $script) { ?>
         <script src="<?= $script ?>"></script>
     <?php } ?>
-<?php } else { ?>
-<!-- By default we have bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 <?php } ?>
+<!-- By default we have always have bootstrap js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<script src="<?= $script ?>"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 namespace Gladblog\Controllers;
-
+session_start();
 use Gladblog\Factory\PDOFactory;
 use Gladblog\Manager\UserManager;
 use Gladblog\Route\Route;
@@ -29,8 +29,11 @@ class AdminController extends AbstractController
             if($answer === 'blanc') {
                 $userManager = new UserManager(new PDOFactory());
                 $userManager->setAdminRights($userId, $badge);
+                $users = $userManager->getAllUsers();
                 $this->render("admin/backoffice.php", [
                     'message' => 'Bienvenue dans le cercle des administrateurs',
+                    'userInfos' => $users,
+                    'your_id' > $userId,
                     'tailwind' => [true, '/public/js/tailwind.js']
                 ], "backoffice", $styleLinks, $scripts);
             } else {
@@ -51,11 +54,13 @@ class AdminController extends AbstractController
 
         $userManager = new UserManager(new PDOFactory());
         $users = $userManager->getAllUsers();
+        $userId = intval($_SESSION['userId']);
         $styleLinks = [];
         $scripts = [];
         $this->render("admin/backoffice.php", [
             "message" => '',
             "userInfos" => $users,
+            'your_id' > $userId,
             'tailwind' => [true, '/public/js/tailwind.js']
         ], "backoffice", $styleLinks, $scripts);
     }
@@ -68,22 +73,19 @@ class AdminController extends AbstractController
         $formUserId = intval($_POST['userId']);
         $userManager = new UserManager(new PDOFactory());
         $user = $userManager->getByUsername($formUserName);
+        $users = $userManager->getAllUsers();
 
         if($user) {
 
             $userManager->deleteUser($formUserId, $formUserName);
-
-            $styleLinks = ['/public/css/style.css',
-                '/public/css/base.css',
-//                '/public/lib/materialize/css/materialize.css',
-                'https://fonts.googleapis.com/icon?family=Material+Icons'
-            ];
-            $scripts = [
-//                         '/public/lib/materialize/js/materialize.js',
-                        '/public/js/script.js'];
+            $userId = intval($_SESSION['userId']);
+            $styleLinks = [];
+            $scripts = [];
 
             $this->render("admin/backoffice.php", [
                 "message" => $formUserName.'a été supprimé de la base',
+                'userInfos' => $users,
+                'your_id' => $userId,
                 'tailwind' => [false, '/public/js/tailwind.js']
             ], "backoffice", $styleLinks, $scripts);
         } else {
@@ -123,19 +125,13 @@ class AdminController extends AbstractController
                     }
 
                     $userManager->updateUser($formUserId, $UserName, $args);
-
-                    $styleLinks = ['/public/css/style.css',
-                        '/public/css/base.css',
-//                        '/public/lib/materialize/css/materialize.css',
-                        'https://fonts.googleapis.com/icon?family=Material+Icons'
-                    ];
-                    $scripts = [
-//                        '/public/lib/materialize/js/materialize.js',
-                                '/public/js/script.js'
-                    ];
+                    $userId = intval($_SESSION['userId']);
+                    $styleLinks = [];
+                    $scripts = [];
 
                     $this->render("admin/backoffice.php", [
                         "message" => $UserName.'a été modifié dans la base',
+                        "your_id" => $userId,
                     ], "backoffice", $styleLinks, $scripts);
                 } else {
                     header('Location: \?error=nousertoupdate');

@@ -1,8 +1,13 @@
-<?php
-echo '<pre>';
-var_dump($posts);
-echo '</pre>';
-?>
+<section class="container-fluid custom-hero-container">
+    <div class="d-flex justify-content-center align-item-center py-5 p-0">
+        <div class="p-sm-5 pb-sm-5 mx-sm-5 bg-custom-secundary-transparent position-relative rounded-3">
+            <div>
+                <h1 class="text-white text-center fs-1 pt-3">Bienvenue sur gladBlog</h1>
+                <h2 class="text-white text-center fs-3">Ecrivez et partagez!</h2>
+            </div>
+        </div>
+    </div>
+</section>
 
 <?php
 if(isset($_GET['error']) && ($_GET['error'] === 'password-no-ok')) {
@@ -31,11 +36,8 @@ if(isset($_GET['error']) && ($_GET['error'] === 'no-user')) {
 
 ?>
 
-<h1>HOME</h1>
+
 <a href="/deconnect">Deconnection</a>
-<h1 class="text-3xl font-bold underline text-clifford">
-    Hello world!
-</h1>
 <a href="/login">login</a>
 <section class="container">
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
@@ -48,7 +50,7 @@ if(isset($_GET['error']) && ($_GET['error'] === 'no-user')) {
                                 <span class="card-title"><?= $post->getTitle() ?></span>
                             </div>
                             <div class="card-content">
-                                <p><?= $post->getContent() ?> </p>
+                                <p><?= substr($post->getContent(), 0, 300) ?> (...)</p>
                             </div>
                             <div class="card-action">
                                 <p>En savoir plus sur <a href="author?name=<?= $post->getAuthor() ?>"><?= $post->getAuthor_name() ?></a></p>
