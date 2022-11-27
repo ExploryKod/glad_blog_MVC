@@ -5,15 +5,49 @@ class Comments extends BaseEntity
 {
     private int $id_comment;
     private string $author_comment;
-    private $publish_date;
+    private ?string $publish_date;
     private string $content_comment;
     private int $id_post;
     private ?int $id_upper_comment;
+    private string | null $post_title;
+
+    /**
+     * @return string|null
+     */
+    public function getPost_title(): ?string
+    {
+        return $this->post_title;
+    }
+
+    /**
+     * @param string|null $post_title
+     */
+    public function setPost_title(?string $post_title): void
+    {
+        $this->post_title = $post_title;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getAdmin_comment(): ?int
+    {
+        return $this->admin_comment;
+    }
+
+    /**
+     * @param int|null $admin_comment
+     */
+    public function setAdmin_comment(?int $admin_comment): void
+    {
+        $this->admin_comment = $admin_comment;
+    }
+    private int | null $admin_comment;
 
     /**
      * @return int
      */
-    public function getIdComment(): int
+    public function getId_comment(): int
     {
         return $this->id_comment;
     }
@@ -21,7 +55,7 @@ class Comments extends BaseEntity
     /**
      * @param int $id_comment
      */
-    public function setIdComment(int $id_comment): void
+    public function setId_comment(int $id_comment): void
     {
         $this->id_comment = $id_comment;
     }
@@ -29,7 +63,7 @@ class Comments extends BaseEntity
     /**
      * @return string
      */
-    public function getAuthorComment(): string
+    public function getAuthor_comment(): string
     {
         return $this->author_comment;
     }
@@ -37,7 +71,7 @@ class Comments extends BaseEntity
     /**
      * @param string $author_comment
      */
-    public function setAuthorComment(string $author_comment): void
+    public function setAuthor_comment(string $author_comment): void
     {
         $this->author_comment = $author_comment;
     }
@@ -45,7 +79,7 @@ class Comments extends BaseEntity
     /**
      * @return mixed
      */
-    public function getPublishDate()
+    public function getPublish_date()
     {
         return $this->publish_date;
     }
@@ -53,7 +87,7 @@ class Comments extends BaseEntity
     /**
      * @param mixed $publish_date
      */
-    public function setPublishDate(string $publish_date): void
+    public function setPublish_date(string | null $publish_date): void
     {
         $this->publish_date = $publish_date;
     }
@@ -61,7 +95,7 @@ class Comments extends BaseEntity
     /**
      * @return string
      */
-    public function getContentComment(): string
+    public function getContent_comment(): string
     {
         return $this->content_comment;
     }
@@ -69,7 +103,7 @@ class Comments extends BaseEntity
     /**
      * @param string $content_comment
      */
-    public function setContentComment(string $content_comment): void
+    public function setContent_comment(string $content_comment): void
     {
         $this->content_comment = $content_comment;
     }
@@ -77,15 +111,15 @@ class Comments extends BaseEntity
     /**
      * @return int
      */
-    public function getIdPost(): int
+    public function getId_post(): int
     {
         return $this->id_post;
     }
 
     /**
-     * @param int $id_post
+     * @param int $idpost
      */
-    public function setIdPost(int $id_post): void
+    public function setId_post(int $id_post): void
     {
         $this->id_post = $id_post;
     }
@@ -93,7 +127,7 @@ class Comments extends BaseEntity
     /**
      * @return int|null
      */
-    public function getIdUpperComment(): ?int
+    public function getId_upper_comment(): ?int
     {
         return $this->id_upper_comment;
     }
@@ -101,7 +135,7 @@ class Comments extends BaseEntity
     /**
      * @param int|null $id_upper_comment
      */
-    public function setIdUpperComment(?int $id_upper_comment): void
+    public function setId_upper_comment(?int $id_upper_comment): void
     {
         $this->id_upper_comment = $id_upper_comment;
     }

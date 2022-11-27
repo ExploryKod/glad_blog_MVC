@@ -23,6 +23,7 @@ class CommentsController extends AbstractController
         $CommentsManager = new CommentsManager(new PDOFactory());
         $posts = $PostsManager->getAllPosts();
         $comments = $CommentsManager->getAllComments();
+        $comment = $CommentsManager->getComment($id_post);
         $CommentsManager->insertNewComment($author_comment, $content_comment, $id_post, $post_title, $admin_comment);
         $message = "";
         $styleLinks = [];
@@ -31,6 +32,7 @@ class CommentsController extends AbstractController
         $this->render("users/writer.php", [
             'message' => 'Vous avez bien commenté le post n°'.$id_post.'.',
             'posts' => $posts,
+            'comment' => $comment,
             'comments' => $comments,
             'post_id' => $id_post
         ], "Espace de lecture", $styleLinks, $scripts);

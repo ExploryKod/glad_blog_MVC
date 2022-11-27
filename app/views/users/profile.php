@@ -1,3 +1,4 @@
+<?php var_dump($_SESSION); ?>
 <main class="container-fluid position-relative m-0 p-0 gap-0">
     <?php if(isset($message) && !empty($message)): ?>
         <div id="fading-alert" class="alert alert-info shadow position-absolute top-10 start-50 translate-middle upper-z-index">
@@ -16,8 +17,8 @@
     <section class="container-fluid p-0 m-0 mb-5">
         <?php if(isset($userData)) { ?>
         <div class="container-fluid bg-dark p-0 m-0 d-flex align-items-start justify-content-start flex-column">
-            <h1 class="text-white fw-bold fs-2 mt-2 mb-2">Bonjour <?= $userData ?></h1>
-            <p class="text-white fs-5 mb-2">Nous vous souhaitons la bienvenue et espérons que vous allez être inspiré.</p>
+            <h1 class="text-white fw-bold fs-2 mt-2 mb-2 ms-2">Bonjour <?= $userData ?></h1>
+            <p class="text-white fs-5 mb-2 ms-2">Nous vous souhaitons la bienvenue et espérons que vous allez être inspiré.</p>
         </div>
         <?php } else { ?>
             <h1>Bienvenue</h1>

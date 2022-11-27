@@ -2,10 +2,13 @@
 echo '<pre>';
 var_dump($_GET['post_id']);
 echo '<pre>';?>
+<?php
+if(isset($comment)) {
+var_dump($comment);
+} ?>
 <main class="container-fluid position-relative">
     <section class="row mt-5 d-flex align-items-center justify-content-center">
         <div class="col-12 w-50 card shadow p-5 bg-white" style="width: 18rem;">
-
                 <?php foreach($posts as $post) {
                     if($post->getIdpost() === intval($_GET['post_id'])) { ?>
                         <div class="container">

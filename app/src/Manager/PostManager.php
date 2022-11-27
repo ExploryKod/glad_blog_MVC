@@ -25,8 +25,8 @@ class PostManager extends BaseManager
 
     public function insertNewPost(string $title, string $content, string $author_name, int $articleStatus, string $image, $author): array
     {
-        $query = $this->pdo->prepare("INSERT INTO posts (content, title, public, image, author_name, author)
-                                                VALUES (:content, :title, :public, :image, :author_name, :author)");
+        $query = $this->pdo->prepare("INSERT INTO posts (content, title, public, image, author_name, author, post_date)
+                                                VALUES (:content, :title, :public, :image, :author_name, :author, NOW())");
         $query->bindValue("content", $content, \PDO::PARAM_STR);
         $query->bindValue("title", $title, \PDO::PARAM_STR);
         $query->bindValue("public", $articleStatus, \PDO::PARAM_STR);

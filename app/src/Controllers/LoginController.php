@@ -43,6 +43,7 @@ class LoginController extends AbstractController
         $userManager = new UserManager(new PDOFactory());
         $user = $userManager->getByUsername($formUsername);
         $userId = $userManager->getByUsername($formUsername)->getId();
+        $userStatus = $userManager->getByUsername($formUsername)->getStatus();
         $links = [];
         $scripts = [];
 
@@ -64,6 +65,7 @@ class LoginController extends AbstractController
             if(empty($_SESSION['userId'])) {
                 $_SESSION['user'] = $formUsername;
                 $_SESSION['userId'] = $userId;
+                $_SESSION['userStatus'] = $userStatus;
                 $message = 'Bonjour '.$_SESSION['user'].', vous êtes bien connecté.';
             } else {
                 $message = 'Bonjour '.$_SESSION['user'].'. Vous êtes toujours connecté.';

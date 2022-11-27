@@ -8,8 +8,7 @@ namespace Gladblog\Controllers;
 use Gladblog\Factory\PDOFactory;
 use Gladblog\Manager\PostManager;
 use Gladblog\Route\Route;
-// inutile:
-//use Gladblog\Controller\AbstractController;
+use Gladblog\Manager\CommentsManager;
 
 class PostController extends AbstractController
 {
@@ -69,7 +68,7 @@ class PostController extends AbstractController
             $postManager = new PostManager(new PDOFactory());
             $title = filter_input(INPUT_POST, 'title');
             $content = filter_input(INPUT_POST, 'content');
-            $author_name = filter_input(INPUT_POST, 'author_name');
+            $author_name = filter_input(INPUT_POST, 'post_author');
             $article_status = filter_input(INPUT_POST, 'article_status');
             $authorId = filter_input(INPUT_POST, 'userId');
             $image = filter_input(INPUT_POST, 'image');
@@ -85,16 +84,18 @@ class PostController extends AbstractController
     #[Route('/read', name: "read", methods: ["GET"])]
     public function read_single_post()
     {
-
             $post_id = intval($_GET['post_id']);
             $postManager = new PostManager(new PDOFactory());
+            $commentsManager = new CommentsManager(new PDOFactory());
             $thePost = $postManager->getPost($post_id);
             $posts = $postManager->getAllPosts();
+            $comment = $commentsManager->getComment($post_id);
 
             $styleLinks = [];
             $scripts = [];
 
             $this->render("users/read.php", [
+                'comment' => $comment,
                 'posts' => $posts,
                 'thePost' => $thePost
             ], "Espace de lecture", $styleLinks, $scripts);
