@@ -13,24 +13,17 @@ use Gladblog\Route\Route;
 
 class PostController extends AbstractController
 {
-    // Ici Route a vocation à être instancié en tant que objet donc on le prépare mais c'est un commentaire et c'est l'API de reflexivité qui permettra
-    // de instancier Route ainsi que de rattacher la fonction en dessous pour rendre la page et les données qu'on utilise dessus (comme en FLASK).
     #[Route('/', name: "homepage", methods: ["GET"])]
     public function home()
     {
         $showAllPosts = new PostManager(new PDOFactory());
         $posts = $showAllPosts->getAllPosts();
 
-        $styleLinks = ['/public/css/style.css',
-                       '/public/css/base.css',
-                        '/public/css/masonry.css'
-                      ];
-        $scripts = ['/public/js/masonry.js',
-            '/public/lib/masonry/masonry.pkgd.min.js'];
+        $styleLinks = [];
+        $scripts = [];
 
         $this->render("home.php", [
-            "posts" => $posts,
-            'tailwind' => [false, '/public/js/tailwind.js']
+            "posts" => $posts
         ], "Votre homepage", $styleLinks, $scripts);
     }
 
@@ -49,8 +42,7 @@ class PostController extends AbstractController
     $scripts = [];
 
     $this->render("users/writer.php", [
-        'posts' => $posts ?? null,
-        'tailwind' => [false, '/public/js/tailwind.js']
+        'posts' => $posts ?? null
     ], "Espace d'écriture", $styleLinks, $scripts);
     }
 
@@ -64,8 +56,7 @@ class PostController extends AbstractController
         $scripts = [];
 
         $this->render("users/writer.php", [
-            'posts' => $posts,
-            'tailwind' => [false, '/public/js/tailwind.js']  
+            'posts' => $posts
         ], "Espace d'écriture", $styleLinks, $scripts);
     }
 
@@ -82,7 +73,7 @@ class PostController extends AbstractController
             $article_status = filter_input(INPUT_POST, 'article_status');
             $authorId = filter_input(INPUT_POST, 'userId');
             $image = filter_input(INPUT_POST, 'image');
-            $postManager->insertComplexPost($title, $content, $author_name, $article_status, $image, $authorId);
+            $postManager->insertNewPost($title, $content, $author_name, $article_status, $image, $authorId);
             header('Location: /writer?success=newarticle');
             exit();
         } else   {
@@ -105,8 +96,7 @@ class PostController extends AbstractController
 
             $this->render("users/read.php", [
                 'posts' => $posts,
-                'thePost' => $thePost,
-                'tailwind' => [false, '/public/js/tailwind.js']
+                'thePost' => $thePost
             ], "Espace de lecture", $styleLinks, $scripts);
 
     }
@@ -125,8 +115,7 @@ class PostController extends AbstractController
 
         $this->render("users/writer.php", [
             'posts' => $posts,
-            'message' => 'Le post n°'.$post_id.' a bien été supprimé.',
-            'tailwind' => [false, '/public/js/tailwind.js']
+            'message' => 'Le post n°'.$post_id.' a bien été supprimé.'
         ], "Espace d'écriture", $styleLinks, $scripts);
 
     }

@@ -21,10 +21,6 @@
                     <div class="group">
                         <input type="submit" class="button" value="Se connecter" name="login">
                     </div>
-                    <div class="hr"></div>
-                    <div class="foot-lnk">
-                        <a href="#forgot">Forgot Password?</a>
-                    </div>
                 </form>
                 <form class="sign-up-htm" action="/register" method="post">
                     <div class="group">

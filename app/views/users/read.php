@@ -1,11 +1,8 @@
-<h1>THE POST</h1>
-
 <?php
 echo '<pre>';
 var_dump($_GET['post_id']);
-var_dump($posts[0]->getIdpost());
 echo '<pre>';?>
-<main class="container-fluid bg-light">
+<main class="container-fluid position-relative">
     <section class="row mt-5 d-flex align-items-center justify-content-center">
         <div class="col-12 w-50 card shadow p-5 bg-white" style="width: 18rem;">
 
@@ -40,13 +37,17 @@ echo '<pre>';?>
                 </div>
                 <div class="modal-body">
                     <form class="d-flex flex-column" action="/register_comment" method="POST">
-                        <input class="form-control"  id="title" type="hidden" name="title" maxlength="250" value="<?= $post->getTitle() ?>">
-                        <input class="form-control"  id="title" type="hidden" name="title" maxlength="250" value="<?= $post->getIdpost() ?>">
-                        <input hidden class="form-control"  id="author_name" type="hidden" name="author_name" maxlength="250" value="<?= $_SESSION['user'] ?>">
+                        <?php foreach($posts as $post) {
+                        if($post->getIdpost() === intval($_GET['post_id'])) { ?>
+                        <input class="form-control"  id="title" type="hidden" name="post_title" maxlength="250" value="<?= $post->getTitle() ?>">
+                        <input class="form-control"  id="title" type="hidden" name="id_post" maxlength="250" value="<?= $post->getIdPost() ?>">
+                        <?php  } ?>
+                        <?php } ?>
+                        <input hidden class="form-control"  id="author_name" type="hidden" name="author_comment" maxlength="250" value="<?= $_SESSION['user'] ?>">
                         <input id="prodId" name="userId" type="hidden" value="<?= $_SESSION['userId']?> >
                         <div class="mb-1">
                                 <label class="form-label fw-bold fs-5 text-center" for="content">Texte du commentaire:<span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="content" name="content" value=""  cols="60" rows="10" placeholder="Entrez votre texte" onfocus="this.onfocus=null;" maxlength="950" value="" required ></textarea>
+                                <textarea class="form-control" id="content" name="content_comment" value=""  cols="60" rows="10" placeholder="Entrez votre texte" onfocus="this.onfocus=null;" maxlength="950" value="" required ></textarea>
                         </div>
                         <div class="mb-1">
                             <input class="btn btn-primary btn-lg" type="submit" value="Valider" name="register_comment">

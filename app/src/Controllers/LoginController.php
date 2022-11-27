@@ -64,9 +64,9 @@ class LoginController extends AbstractController
             if(empty($_SESSION['userId'])) {
                 $_SESSION['user'] = $formUsername;
                 $_SESSION['userId'] = $userId;
-                $message = 'Vous êtes bien connecté';
+                $message = 'Bonjour '.$_SESSION['user'].', vous êtes bien connecté.';
             } else {
-                $message = 'Bonjour '.$_SESSION['user'].' .Vous étiez déjà connecté';
+                $message = 'Bonjour '.$_SESSION['user'].'. Vous êtes toujours connecté.';
             }
 
             $this->render("users/profile.php", [

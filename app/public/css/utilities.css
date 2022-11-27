@@ -8,3 +8,15 @@
 .upper-z-index {
    z-index:999!important;
 }
+
+.fix-width {
+    max-width: 5rem;
+}
+
+.fix-height {
+    max-height:5rem;
+}
+
+.height-300 {
+    max-height: 300px;
+}

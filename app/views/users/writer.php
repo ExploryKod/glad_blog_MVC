@@ -1,4 +1,4 @@
-<h1>Writer</h1>
+<main class="container-fluid position-relative">
 <section class="mt-5 row">
 
     <article class="col-sm-6 container-fluid d-flex align-items-start justify-content-center">
@@ -115,10 +115,5 @@
             </tbody>
         </table>
     </article>
-
-    <?php
-    if(isset($postOne)) {
-        var_dump($postOne);
-    }
-     ?>
 </section>
+</main>
