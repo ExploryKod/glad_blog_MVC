@@ -42,8 +42,6 @@ class LoginController extends AbstractController
         $formPwd = $_POST['password'];
         $userManager = new UserManager(new PDOFactory());
         $user = $userManager->getByUsername($formUsername);
-        $userId = $userManager->getByUsername($formUsername)->getId();
-        $userStatus = $userManager->getByUsername($formUsername)->getStatus();
         $links = [];
         $scripts = [];
 
@@ -52,16 +50,14 @@ class LoginController extends AbstractController
             $links = ["/public/css/login.css"];
             $this->render("login.php", [
                 "message" => $message,
-                "userData" => $userManager->getByUsername($formUsername)->getUsername(),
-                "status" => $userManager->getByUsername($formUsername)->getStatus(),
-                "hash" => $userManager->getByUsername($formUsername)->getHashedPassword(),
                 "data" => $_POST
             ],
                 "Utilisateur Inconnu", $links, $scripts);
         }
 
         if ($user->passwordMatch($formPwd))  {
-
+            $userId = $userManager->getByUsername($formUsername)->getId();
+            $userStatus = $userManager->getByUsername($formUsername)->getStatus();
             if(empty($_SESSION['userId'])) {
                 $_SESSION['user'] = $formUsername;
                 $_SESSION['userId'] = $userId;
