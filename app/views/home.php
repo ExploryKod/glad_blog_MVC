@@ -21,18 +21,20 @@
             <p class="fs-6 text-white text-start"> Nos blogeurs ont rendu ces articles publics : vous pouvez consulter ici les premières lignes mais pour tout lire, vous devez créer un compte ou vous connecter.</p>
         </div>
 
-        <div class="row justify-content-center align-items-start gap-5">
+        <div class="d-flex flex-column justify-content-center align-items-center gap-5">
             <?php foreach($posts as $post): ?>
                 <?php if(isset($post)): ?>
-                    <div class="col-3">
+                <div class="row">
+                    <div class="col-12">
                         <div class="position-relative">
-                            <div class="text-wrapper position-absolute top-0 left-0 upper-z-index">
+                            <div class="text-wrapper upper-z-index">
                                 <h5 class=""><?= $post->getTitle() ?></h5>
                                 <h6> Auteur: <?= $post->getAuthor_name() ?></h6>
                                 <p class=""><?= substr($post->getContent(), 0, 300) ?> (...)</p>
                             </div>
                         </div>
                     </div>
+                </div>
                 <?php endif ?>
             <?php endforeach ?>
         </div>
