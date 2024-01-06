@@ -1,0 +1,19 @@
+services:
+  - name: php
+    buildCommand: docker build -t my-php-app .
+    startCommand: docker run -p 1300:80 my-php-app
+    envVars:
+      - key: RENDER
+        value: true
+
+  - name: database
+    image: mariadb
+    envVars:
+      - key: MYSQL_DATABASE
+        value: glad_blog
+      - key: MYSQL_ROOT_PASSWORD
+        value: password
+
+  - name: adminer
+    image: adminer
+    port: 1301
