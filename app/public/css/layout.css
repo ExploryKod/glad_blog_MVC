@@ -1,0 +1,270 @@
+@import "variables.css";
+
+/* ---------------------------------------------------------------------------
+   Layout, spacing, responsive — couleurs / typos inchangées (voir theme.css)
+--------------------------------------------------------------------------- */
+
+body.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 100%;
+}
+
+.page {
+    width: 100%;
+    max-width: var(--page-max);
+    margin-inline: auto;
+    padding-inline: var(--space-2);
+}
+
+.page--narrow {
+    max-width: var(--content-max);
+}
+
+.section {
+    padding-block: var(--space-5);
+}
+
+.section--tight {
+    padding-block: var(--space-3);
+}
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.stack--lg {
+    gap: var(--space-4);
+}
+
+.cluster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+}
+
+.flash-alert {
+    position: fixed;
+    top: calc(var(--header-height) + var(--space-2));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050;
+    width: min(92vw, 28rem);
+    margin: 0;
+}
+
+/* Header */
+.navbar-glad {
+    min-height: var(--header-height);
+    padding-block: var(--space-1);
+}
+
+.navbar-glad .container-fluid {
+    max-width: var(--page-max);
+    margin-inline: auto;
+    padding-inline: var(--space-2);
+}
+
+.navbar-glad .navbar-collapse {
+    justify-content: flex-end;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-glad .navbar-nav {
+        padding-block: var(--space-2);
+        gap: var(--space-1);
+    }
+}
+
+/* Hero */
+.custom-hero-container {
+    min-height: var(--hero-min-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4) var(--space-2);
+}
+
+.hero-panel {
+    width: min(100%, 36rem);
+    padding: var(--space-4) var(--space-3);
+    text-align: center;
+    border-radius: var(--radius);
+}
+
+@media (min-width: 768px) {
+    .hero-panel {
+        padding: var(--space-5) var(--space-4);
+    }
+}
+
+/* Home feed */
+.feed-intro {
+    padding: var(--space-3);
+    border-radius: var(--radius);
+    margin-bottom: var(--space-4);
+}
+
+.post-grid {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .post-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-4);
+    }
+}
+
+.post-card {
+    padding: var(--space-3);
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.post-card p {
+    margin-bottom: 0;
+    flex: 1;
+}
+
+/* Writer: form + list */
+.writer-layout {
+    display: grid;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    align-items: start;
+}
+
+@media (min-width: 992px) {
+    .writer-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+        gap: var(--space-5);
+    }
+}
+
+.writer-panel {
+    padding: var(--space-3);
+    border-radius: var(--radius);
+    width: 100%;
+}
+
+@media (min-width: 576px) {
+    .writer-panel {
+        padding: var(--space-4);
+    }
+}
+
+.table-responsive-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Read article */
+.read-layout {
+    display: grid;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+}
+
+.read-article {
+    padding: var(--space-3);
+    border-radius: var(--radius);
+    max-width: var(--content-max);
+    margin-inline: auto;
+    width: 100%;
+}
+
+@media (min-width: 576px) {
+    .read-article {
+        padding: var(--space-4);
+    }
+}
+
+.read-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: center;
+    margin-top: var(--space-3);
+}
+
+.comments-section {
+    padding: var(--space-4) var(--space-2);
+    border-radius: var(--radius);
+    max-width: var(--page-max);
+    margin-inline: auto;
+}
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: var(--content-max);
+    margin-inline: auto;
+}
+
+.comment-item {
+    padding: var(--space-3);
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+}
+
+/* Profile / dashboard */
+.dashboard {
+    max-width: 32rem;
+    margin: calc(-1 * var(--space-3)) auto var(--space-5);
+    padding: var(--space-4) var(--space-3);
+    border-radius: var(--radius);
+    position: relative;
+    z-index: 1;
+}
+
+.dashboard .d-grid {
+    width: 100%;
+}
+
+.profile-welcome {
+    padding: var(--space-3) var(--space-2);
+}
+
+.profile-welcome > * {
+    max-width: var(--page-max);
+    margin-inline: auto;
+    padding-inline: var(--space-2);
+}
+
+/* Admin / forms narrow */
+.form-narrow {
+    max-width: 28rem;
+    margin-inline: auto;
+    width: 100%;
+    padding: var(--space-4) var(--space-3);
+    border-radius: var(--radius);
+}
+
+/* Login shell (structure; colors stay in login.css) */
+.login-page {
+    min-height: calc(100vh - var(--header-height));
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    padding: var(--space-2);
+}
+
+@media (min-width: 768px) {
+    .login-page {
+        padding: var(--space-4);
+    }
+}

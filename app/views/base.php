@@ -5,17 +5,20 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <?php foreach($_pageRelativeLinks as $link) { ?>
-        <link rel="stylesheet" href="<?= $link ?>">
-        <?php } ?>
-        <link href="/public/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/public/css/reset.css" rel="stylesheet">
-        <link href="/public/css/variables.css" rel="stylesheet">
-        <link href="/public/css/utilities.css" rel="stylesheet">
-        <link href="/public/css/hero.css" rel="stylesheet">
-        <link href="/public/css/fade.css" rel="stylesheet">
+    <link href="/public/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/public/css/reset.css" rel="stylesheet">
+    <link href="/public/css/variables.css" rel="stylesheet">
+    <link href="/public/css/theme.css" rel="stylesheet">
+    <link href="/public/css/layout.css" rel="stylesheet">
+    <link href="/public/css/admin.css" rel="stylesheet">
+    <link href="/public/css/utilities.css" rel="stylesheet">
+    <link href="/public/css/hero.css" rel="stylesheet">
+    <link href="/public/css/fade.css" rel="stylesheet">
     <?php if(isset($_pageTitle) && $_pageTitle === 'Votre homepage') { ?>
         <link href="/public/css/masonry.css" rel="stylesheet">
+    <?php } ?>
+    <?php foreach ($_pageRelativeLinks as $link) { ?>
+        <link rel="stylesheet" href="<?= $link ?>">
     <?php } ?>
 
     <title><?= $_pageTitle; ?></title>

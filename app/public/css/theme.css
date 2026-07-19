@@ -1,0 +1,210 @@
+@import "variables.css";
+
+/* ---------------------------------------------------------------------------
+   GladBlog theme — Sunnyside palette over Bootstrap
+--------------------------------------------------------------------------- */
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, h5, .navbar-brand {
+    font-family: var(--font-display);
+}
+
+a {
+    color: var(--color-primary-soft);
+}
+
+a:hover {
+    color: var(--color-primary);
+}
+
+/* Nav */
+.navbar-glad {
+    background-color: var(--color-primary) !important;
+}
+
+.navbar-glad .navbar-brand,
+.navbar-glad .nav-link {
+    color: var(--color-white) !important;
+    font-weight: 600;
+}
+
+.navbar-glad .nav-link:hover,
+.navbar-glad .nav-link:focus {
+    color: var(--color-accent) !important;
+}
+
+.navbar-glad .navbar-toggler {
+    border-color: hsla(0, 0%, 100%, 0.35);
+}
+
+.navbar-glad .navbar-toggler-icon {
+    filter: invert(1);
+}
+
+/* Buttons */
+.btn-primary {
+    --bs-btn-bg: var(--color-primary);
+    --bs-btn-border-color: var(--color-primary);
+    --bs-btn-hover-bg: var(--color-primary-soft);
+    --bs-btn-hover-border-color: var(--color-primary-soft);
+    --bs-btn-active-bg: var(--color-primary);
+    --bs-btn-active-border-color: var(--color-primary);
+    --bs-btn-disabled-bg: var(--color-primary-soft);
+    --bs-btn-disabled-border-color: var(--color-primary-soft);
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--color-primary-soft);
+    border-color: var(--color-primary-soft);
+    color: var(--color-white);
+}
+
+.btn-success {
+    --bs-btn-bg: var(--color-primary-soft);
+    --bs-btn-border-color: var(--color-primary-soft);
+    background-color: var(--color-primary-soft);
+    border-color: var(--color-primary-soft);
+    color: var(--color-white);
+}
+
+.btn-success:hover,
+.btn-success:focus {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.btn-warning {
+    --bs-btn-bg: var(--color-accent);
+    --bs-btn-border-color: var(--color-accent);
+    --bs-btn-color: var(--color-fg);
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-fg);
+}
+
+.btn-warning:hover,
+.btn-warning:focus {
+    filter: brightness(0.95);
+    color: var(--color-fg);
+}
+
+.btn-danger {
+    --bs-btn-bg: var(--color-accent-warm);
+    --bs-btn-border-color: var(--color-accent-warm);
+    background-color: var(--color-accent-warm);
+    border-color: var(--color-accent-warm);
+    color: var(--color-fg);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--color-primary);
+    --bs-btn-border-color: var(--color-primary);
+    --bs-btn-hover-bg: var(--color-primary);
+    --bs-btn-hover-border-color: var(--color-primary);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* Forms */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-primary-soft);
+    box-shadow: 0 0 0 0.2rem hsla(167, 34%, 41%, 0.25);
+}
+
+.form-label span,
+.form-label .text-danger {
+    color: var(--color-accent-warm) !important;
+}
+
+/* Tables */
+.table {
+    --bs-table-bg: var(--color-surface);
+    color: var(--color-fg);
+}
+
+.table > :not(caption) > * > * {
+    border-bottom-color: var(--color-border);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-accent-bg: hsla(167, 34%, 41%, 0.08);
+    color: var(--color-fg);
+}
+
+.table thead th {
+    color: var(--color-primary);
+    font-family: var(--font-display);
+}
+
+.table-hover > tbody > tr:hover > * {
+    --bs-table-accent-bg: hsla(167, 34%, 41%, 0.16);
+}
+
+/* Alerts */
+.alert-info {
+    --bs-alert-bg: hsla(167, 34%, 41%, 0.15);
+    --bs-alert-border-color: var(--color-primary-soft);
+    --bs-alert-color: var(--color-fg);
+    background-color: hsla(167, 34%, 41%, 0.15);
+    border-color: var(--color-primary-soft);
+    color: var(--color-fg);
+}
+
+.alert-success {
+    --bs-alert-bg: hsla(168, 38%, 24%, 0.12);
+    --bs-alert-border-color: var(--color-primary);
+    --bs-alert-color: var(--color-primary);
+    background-color: hsla(168, 38%, 24%, 0.12);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.alert-danger {
+    --bs-alert-bg: hsla(7, 99%, 70%, 0.2);
+    --bs-alert-border-color: var(--color-accent-warm);
+    --bs-alert-color: var(--color-fg);
+    background-color: hsla(7, 99%, 70%, 0.2);
+    border-color: var(--color-accent-warm);
+    color: var(--color-fg);
+}
+
+/* Cards / surfaces */
+.card,
+.bg-light {
+    background-color: var(--color-surface) !important;
+    color: var(--color-fg);
+}
+
+.bg-dark {
+    background-color: var(--color-primary) !important;
+}
+
+.text-primary {
+    color: var(--color-primary) !important;
+}
+
+.text-muted {
+    color: var(--color-muted) !important;
+}
+
+/* Modals */
+.modal-content {
+    background-color: var(--color-surface);
+    color: var(--color-fg);
+    border-color: var(--color-border);
+}
+
+.modal-header {
+    border-bottom-color: var(--color-border);
+}

@@ -1,43 +1,66 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap');
 
 :root {
+    /* Sunnyside-inspired palette */
+    --color-bg: hsl(40 30% 98%);
+    --color-fg: hsl(212 27% 19%);
+    --color-muted: hsl(213 9% 39%);
+    --color-primary: #25564b;
+    --color-primary-soft: hsl(167 34% 41%);
+    --color-accent: hsl(51 100% 49%);
+    --color-accent-warm: hsl(7 99% 70%);
+    --color-surface: hsl(0 100% 100%);
+    --color-border: hsl(210 4% 67%);
+    --color-white: hsl(0 0% 100%);
 
-    --font-family: 'Open Sans', sans-serif;
-    --dark-text-color: #03045e;
-    --white-text-color: #fff;
+    --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Fraunces', Georgia, serif;
 
-    /* Couleurs des boutons */
-    --btn-border-color: #03045e;
-    --btn-bg-color: hsla(240, 2%, 38%, 0.216);
-    --btn-hover-bg-color: #03045e;
-    --btn-text-color: #03045e;
-    --btn-text-hover-color: #fff;
+    /* Legacy aliases (vues / CSS existants) */
+    --font-family: var(--font-sans);
+    --dark-text-color: var(--color-fg);
+    --white-text-color: var(--color-white);
 
-    /* Couleurs du tableau des clients */
-    --table-header-color: #03045e;
-    --table-row-hover-color: #508AA8;
-    --table-text-hover-color: #fff;
-    --table-border-color: #03045e;
+    --btn-border-color: var(--color-primary);
+    --btn-bg-color: hsla(167, 34%, 41%, 0.12);
+    --btn-hover-bg-color: var(--color-primary);
+    --btn-text-color: var(--color-primary);
+    --btn-text-hover-color: var(--color-white);
 
-    /* Couleurs du formulaire */
-    --textarea-focus-bg-color: rgba(3, 4, 94, 0.1);
-    --form-field-bg-color: rgba(3, 4, 94, 0.1);
-    --from-field-border-color: #03045e;
-    --required-star-color: #ff0000;
-    --input-border-bottom: #508AA8;
+    --table-header-color: var(--color-primary);
+    --table-row-hover-color: var(--color-primary-soft);
+    --table-text-hover-color: var(--color-white);
+    --table-border-color: var(--color-border);
 
-    --input-border: #8b8a8b;
-    --input-focus-h: 245;
-    --input-focus-s: 100%;
-    --input-focus-l: 42%;
+    --textarea-focus-bg-color: hsla(167, 34%, 41%, 0.1);
+    --form-field-bg-color: hsla(167, 34%, 41%, 0.08);
+    --from-field-border-color: var(--color-primary);
+    --required-star-color: var(--color-accent-warm);
+    --input-border-bottom: var(--color-primary-soft);
 
-    /* Couleur de la fenêtre de confirmation */
-    --modal-container-color: rgba(3, 4, 94, 0.5);
-    --modal-bg-color: #fff;
-    --icon-close-color-hover: #ff0000;
-    --icon-close-color: rgb(3, 4, 94);
-    --box-shadow-color: rgba(0, 0, 0, 0.2);
+    --input-border: var(--color-border);
+    --input-focus-h: 167;
+    --input-focus-s: 34%;
+    --input-focus-l: 32%;
 
-    /* Couleurs de la bannière d'accueil */
-    --secundary-transparent:rgba(66,122,161,0.5);
+    --modal-container-color: hsla(168, 38%, 24%, 0.45);
+    --modal-bg-color: var(--color-surface);
+    --icon-close-color-hover: var(--color-accent-warm);
+    --icon-close-color: var(--color-primary);
+    --box-shadow-color: rgba(37, 86, 75, 0.18);
+
+    --secundary-transparent: var(--color-primary);
+
+    /* Layout / spacing (structure only) */
+    --space-1: 0.5rem;
+    --space-2: 1rem;
+    --space-3: 1.5rem;
+    --space-4: 2rem;
+    --space-5: 3rem;
+    --space-6: 4.5rem;
+    --page-max: 72rem;
+    --content-max: 42rem;
+    --hero-min-height: min(52vh, 28rem);
+    --header-height: 4rem;
+    --radius: 0.75rem;
 }

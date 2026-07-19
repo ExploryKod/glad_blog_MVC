@@ -1,40 +1,37 @@
-<main class="container-fluid position-relative m-0 p-0 gap-0">
+<main class="position-relative">
     <?php if(isset($message) && !empty($message)): ?>
-        <div id="fading-alert" class="alert alert-info shadow position-absolute top-10 start-50 translate-middle upper-z-index">
-            <p class="text-center fw-bold fs-5"><?= $message ?></p>
+        <div id="fading-alert" class="alert alert-info shadow flash-alert">
+            <p class="text-center fw-bold fs-5 mb-0"><?= $message ?></p>
         </div>
     <?php endif ?>
-    <section class="container-fluid custom-hero-container m-0 p-0 upper-z-index">
-        <div class="d-flex justify-content-center align-item-center py-5 p-0">
-            <div class="p-sm-5 pb-sm-5 mx-sm-5 bg-custom-secundary-transparent position-relative rounded-3">
-                <div>
-                    <h1 class="text-white text-center fs-1 pt-3">Bienvenue sur votre espace</h1>
-                </div>
-            </div>
+
+    <section class="custom-hero-container">
+        <div class="hero-panel bg-custom-secundary-transparent">
+            <h1 class="text-white text-center fs-1 mb-0">Bienvenue sur votre espace</h1>
         </div>
     </section>
-    <section class="container-fluid p-0 m-0 mb-5">
+
+    <section class="profile-welcome bg-dark">
         <?php if(isset($userData)) { ?>
-        <div class="container-fluid bg-dark p-0 m-0 d-flex align-items-start justify-content-start flex-column">
-            <h1 class="text-white fw-bold fs-2 mt-2 mb-2 ms-2">Bonjour <?= $userData ?></h1>
-            <p class="text-white fs-5 mb-2 ms-2">Nous vous souhaitons la bienvenue et espérons que vous allez être inspiré.</p>
-        </div>
+            <h2 class="text-white fw-bold fs-3 mb-2">Bonjour <?= htmlspecialchars((string) $userData) ?></h2>
+            <p class="text-white fs-5 mb-0">Nous vous souhaitons la bienvenue et espérons que vous allez être inspiré.</p>
         <?php } else { ?>
-            <h1>Bienvenue</h1>
+            <h2 class="text-white">Bienvenue</h2>
         <?php } ?>
     </section>
-    <section class="container d-flex align-items-center justify-items-center flex-column p-5 bg-light shadow rounded">
-        <h1 class="fs-2 mb-5 mt-2"> Votre tableau de bord: </h1>
-        <div class="d-grid flex-column align-items-center justify-content-center gap-3">
-            <?php if(isset($status)) {
-            if($status !== 'admin') { ?>
-            <a class="btn btn-lg btn-info" role="button" href="/upgrade">Devenir administrateur</a>
-            <?php } }?>
-            <?php if(isset($status)) {
-                if($status === 'admin') { ?>
-                    <a class="btn btn-lg btn-warning" href="/backoffice" >espace d'administration</a>
-                <?php } }?>
-            <a class="btn btn-lg btn-success" role="button" href="/writer"> Rédiger un post </a>
+
+    <section class="page section--tight">
+        <div class="dashboard bg-light shadow">
+            <h2 class="fs-3 mb-4 text-center">Votre tableau de bord</h2>
+            <div class="d-grid gap-3">
+                <?php if(isset($status) && $status !== 'admin') { ?>
+                    <a class="btn btn-lg btn-info" role="button" href="/upgrade">Devenir administrateur</a>
+                <?php } ?>
+                <?php if(isset($status) && $status === 'admin') { ?>
+                    <a class="btn btn-lg btn-warning" href="/backoffice">Espace d'administration</a>
+                <?php } ?>
+                <a class="btn btn-lg btn-success" role="button" href="/writer">Rédiger un post</a>
+            </div>
         </div>
     </section>
 </main>
