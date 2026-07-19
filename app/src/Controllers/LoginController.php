@@ -1,10 +1,7 @@
 <?php
+
 namespace Gladblog\Controllers;
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-use Gladblog\Factory\PDOFactory;
-use Gladblog\Manager\UserManager;
+
 use Gladblog\Route\Route;
 
 class LoginController extends AbstractController
@@ -12,59 +9,43 @@ class LoginController extends AbstractController
     #[Route('/login', name: "login", methods: ["GET"])]
     public function directLoginPage()
     {
-        $links = ["/public/css/login.css"];
-        $scripts = [];
-        $this->render("login.php", [], "login", $links, $scripts);
+        $this->render("login.php", [], "login", ["/public/css/login.css"]);
     }
 
     #[Route('/profile', name: "profile", methods: ["GET"])]
     public function directProfilePage()
     {
-        $userManager = new UserManager(new PDOFactory());
-        $formUsername = $_SESSION['user'];
-        $links = [];
-        $scripts = [];
-        $message = "";
+        $user = $this->users()->getByUsername((string) $this->session()->username());
+
         $this->render("users/profile.php", [
-            "message" => $message,
-            "userData" => $userManager->getByUsername($formUsername)->getUsername(),
-            "status" => $userManager->getByUsername($formUsername)->getStatus(),
+            "message" => "",
+            "userData" => $user?->getUsername(),
+            "status" => $user?->getStatus(),
             "data" => $_GET
-        ],
-            "profile", $links, $scripts);
+        ], "profile");
     }
 
     #[Route('/login', name: "login", methods: ["POST"])]
     public function login()
     {
-
-        $formUsername = $_POST['username'];
-        $formPwd = $_POST['password'];
-        $userManager = new UserManager(new PDOFactory());
-        $user = $userManager->getByUsername($formUsername);
-        $links = [];
-        $scripts = [];
+        $formUsername = $_POST['username'] ?? '';
+        $formPwd = $_POST['password'] ?? '';
+        $user = $this->users()->getByUsername($formUsername);
 
         if (!$user) {
-            $message = "Vous n'êtes pas enregistré chez nous.";
-            $links = ["/public/css/login.css"];
             $this->render("login.php", [
-                "message" => $message,
+                "message" => "Vous n'êtes pas enregistré chez nous.",
                 "data" => $_POST
-            ],
-                "Utilisateur Inconnu", $links, $scripts);
+            ], "Utilisateur Inconnu", ["/public/css/login.css"]);
             return;
         }
 
-        if ($user->passwordMatch($formPwd))  {
-
-            if(empty($_SESSION['userId'])) {
-                $_SESSION['user'] = $user->getUsername();
-                $_SESSION['userId'] = $user->getId();
-                $_SESSION['userStatus'] = $user->getStatus();
-                $message = 'Bonjour '.$_SESSION['user'].', vous êtes bien connecté.';
+        if ($user->passwordMatch($formPwd)) {
+            if (!$this->session()->isLoggedIn()) {
+                $this->session()->login($user);
+                $message = 'Bonjour ' . $this->session()->username() . ', vous êtes bien connecté.';
             } else {
-                $message = 'Bonjour '.$_SESSION['user'].'. Vous êtes toujours connecté.';
+                $message = 'Bonjour ' . $this->session()->username() . '. Vous êtes toujours connecté.';
             }
 
             $this->render("users/profile.php", [
@@ -72,36 +53,26 @@ class LoginController extends AbstractController
                 "userData" => $user->getUsername(),
                 "status" => $user->getStatus(),
                 "data" => $_POST
-            ],
-                "profile", $links, $scripts);
-
-        } else {
-            $message = 'mot de passe invalide';
-            $links = ["/public/css/login.css"];
-            $scripts = ["/public/js/fade.js"];
-            $this->render("login.php", [
-                "message" => $message,
-                "data" => $_POST
-            ],
-                "Mot de passe invalide", $links, $scripts);
+            ], "profile");
+            return;
         }
 
-        header('Location: /?error="unknown"');
-        exit();
+        $this->render("login.php", [
+            "message" => 'mot de passe invalide',
+            "data" => $_POST
+        ], "Mot de passe invalide", ["/public/css/login.css"], ["/public/js/fade.js"]);
     }
 
     #[Route('/deconnect', name: "deconnexion", methods: ["GET"])]
     public function deconnect()
     {
-        // Détruire la session.
-        if (session_destroy()) {
-            // Redirection vers la page de connexion
-            $links = ["/public/css/login.css"];
-            $scripts = ["/public/js/fade.js"];
-            $this->render("login.php", ["message" => 'Vous avez été déconnecté'], "login", $links, $scripts);
-            exit();
-        }
-
+        $this->session()->destroy();
+        $this->render(
+            "login.php",
+            ["message" => 'Vous avez été déconnecté'],
+            "login",
+            ["/public/css/login.css"],
+            ["/public/js/fade.js"]
+        );
     }
-
 }

@@ -11,6 +11,7 @@ Un simple blog qui fait un CRUD mais écrit en php pure pour apprendre les fonda
 le but est d'apprendre deux types de compétence:
 - Une architecture MVC (Model - View - Controller) et la POO en php.
 - Un modèle de domaine riche (règles métier dans les Entities, Managers = persistance).
+- Des contrôleurs fins via injection de dépendances (`AppContainer` → Managers / Session).
 - Utilisation d'un système de route avec les outils de php sans framework.
 - Usage de Docker pour démarrer l'app avec docker-compose en définissant soi-même la configuration.
 

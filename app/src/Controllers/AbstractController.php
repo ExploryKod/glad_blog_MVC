@@ -2,15 +2,25 @@
 
 namespace Gladblog\Controllers;
 
+use Gladblog\Container\AppContainer;
+use Gladblog\Manager\CommentsManager;
+use Gladblog\Manager\PostManager;
+use Gladblog\Manager\UserManager;
+use Gladblog\Service\Session;
+
 abstract class AbstractController
 {
+    protected AppContainer $app;
 
     /**
-     * @param string $action
-     * @param array $params
+     * @param AppContainer $app Conteneur de dépendances (Managers, Session, Database)
+     * @param string $action Méthode du controller à exécuter
+     * @param array $params Paramètres extraits de l’URL
      */
-    public function __construct(string $action, array $params = [])
+    public function __construct(AppContainer $app, string $action, array $params = [])
     {
+        $this->app = $app;
+
         if (!is_callable([$this, $action])) {
             throw new \RuntimeException("La methode $action n'est pas disponible dans ce controller");
         }
@@ -18,9 +28,57 @@ abstract class AbstractController
     }
 
     /**
-     * @param string $view
-     * @param array $args
-     * @param string $title
+     * @return PostManager
+     */
+    protected function posts(): PostManager
+    {
+        return $this->app->posts();
+    }
+
+    /**
+     * @return UserManager
+     */
+    protected function users(): UserManager
+    {
+        return $this->app->users();
+    }
+
+    /**
+     * @return CommentsManager
+     */
+    protected function comments(): CommentsManager
+    {
+        return $this->app->comments();
+    }
+
+    /**
+     * @return Session
+     */
+    protected function session(): Session
+    {
+        return $this->app->session();
+    }
+
+    /**
+     * Redirige vers une URL puis interrompt l’exécution.
+     *
+     * @param string $url
+     * @return void
+     */
+    protected function redirect(string $url): void
+    {
+        header('Location: ' . $url);
+        exit();
+    }
+
+    /**
+     * Assemble le layout (header + vue + base) et envoie la réponse HTML.
+     *
+     * @param string $view Chemin relatif sous views/
+     * @param array $args Variables exposées à la vue
+     * @param string $title Titre de la page
+     * @param array $styleLinks Feuilles de style publiques à charger
+     * @param array $styleScripts Scripts publics à charger
      * @return void
      */
     public function render(string $view, array $args = [], string $title = "Document", array $styleLinks = [], array $styleScripts = [])
@@ -31,22 +89,18 @@ abstract class AbstractController
         $styleLink = [];
         $relativePublicLink = [];
         $relativePublicScript = [];
-        if(!empty($styleLinks))
-        {
-            foreach($styleLinks as $link)
-            {
-                $absoluteLink = dirname(__DIR__,2) . $link;
+        if (!empty($styleLinks)) {
+            foreach ($styleLinks as $link) {
+                $absoluteLink = dirname(__DIR__, 2) . $link;
                 $relativeLink = $link;
                 $styleLink[] = $absoluteLink;
                 $relativePublicLink[] = $relativeLink;
             }
         }
 
-        if(!empty($styleScripts))
-        {
-            foreach($styleScripts as $script)
-            {
-                $absoluteScript = dirname(__DIR__,2) . $script;
+        if (!empty($styleScripts)) {
+            foreach ($styleScripts as $script) {
+                $absoluteScript = dirname(__DIR__, 2) . $script;
                 $relativeScript = $script;
                 $styleLink[] = $absoluteScript;
                 $relativePublicScript[] = $relativeScript;
@@ -59,9 +113,9 @@ abstract class AbstractController
         }
 
         unset($args);
-        $profilePage = ['',''];
-        $connexion = ['Se connecter','/login'];
-        if(!empty($_SESSION['userId'])) {
+        $profilePage = ['', ''];
+        $connexion = ['Se connecter', '/login'];
+        if ($this->session()->isLoggedIn()) {
             $connexion[0] = 'Se déconnecter';
             $connexion[1] = '/deconnect';
             $profilePage = ['Mon espace', '/profile'];
