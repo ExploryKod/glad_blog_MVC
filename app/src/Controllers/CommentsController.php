@@ -11,6 +11,8 @@ class CommentsController extends AbstractController
     #[Route('/register_comment', name: "comment", methods: ["POST"])]
     public function register_comment()
     {
+        $this->requireAuth();
+
         $id_post = intval($_POST['id_post'] ?? 0);
 
         try {

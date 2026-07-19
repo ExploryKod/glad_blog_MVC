@@ -19,6 +19,8 @@ class PostController extends AbstractController
     #[Route('/writer', name: "writerpage", methods: ["GET"])]
     public function writerByGet()
     {
+        $this->requireAuth();
+
         $postId = $_GET['id'] ?? null;
         if (isset($postId)) {
             $this->posts()->deletePost($postId);
@@ -33,6 +35,8 @@ class PostController extends AbstractController
     #[Route('/writer', name: "writer", methods: ["POST"])]
     public function writerByPost()
     {
+        $this->requireAuth();
+
         $this->render("users/writer.php", [
             'posts' => $this->posts()->getAllPosts()
         ], "Espace d'écriture");
@@ -41,6 +45,8 @@ class PostController extends AbstractController
     #[Route('/register_post', name: "writer", methods: ["POST"])]
     public function register_post()
     {
+        $this->requireAuth();
+
         if (!isset($_POST['register_article'])) {
             $this->redirect('/writer?error=submitnull');
         }
@@ -65,6 +71,8 @@ class PostController extends AbstractController
     #[Route('/read', name: "read", methods: ["GET", "POST"])]
     public function read_single_post()
     {
+        $this->requireAuth();
+
         $post_id = intval($_GET['post_id'] ?? 0);
 
         $this->render("users/read.php", [
@@ -78,6 +86,8 @@ class PostController extends AbstractController
     #[Route('/deletepost', name: "deletepost", methods: ["GET"])]
     public function delete_single_post()
     {
+        $this->requireAuth();
+
         $post_id = intval($_GET['post_id'] ?? 0);
         $this->posts()->deletePost($post_id);
 

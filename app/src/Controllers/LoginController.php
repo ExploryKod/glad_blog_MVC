@@ -15,6 +15,8 @@ class LoginController extends AbstractController
     #[Route('/profile', name: "profile", methods: ["GET"])]
     public function directProfilePage()
     {
+        $this->requireAuth();
+
         $user = $this->users()->getByUsername((string) $this->session()->username());
 
         $this->render("users/profile.php", [
