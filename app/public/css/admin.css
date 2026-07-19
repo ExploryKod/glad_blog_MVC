@@ -1,0 +1,63 @@
+.admin-panel {
+    width: 100%;
+    max-width: 800px;
+    margin-inline: auto;
+    padding: var(--space-3);
+}
+
+@media (min-width: 576px) {
+    .admin-panel {
+        padding: var(--space-4);
+    }
+}
+
+.admin-panel .btn:not(.btn-block) {
+    width: auto;
+}
+
+.admin-user-list {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.admin-user-list .table {
+    margin-bottom: 0;
+    min-width: 36rem;
+}
+
+.admin-user-list .table td,
+.admin-user-list .table th {
+    vertical-align: middle;
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.admin-actions form {
+    display: inline;
+    margin: 0;
+}
+
+.admin-edit-form .form-row-2 {
+    display: grid;
+    gap: var(--space-2);
+}
+
+@media (min-width: 576px) {
+    .admin-edit-form .form-row-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.admin-edit-form .form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: flex-end;
+    margin-top: var(--space-3);
+}

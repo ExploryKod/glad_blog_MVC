@@ -1,139 +1,174 @@
-<?php ?>
-<div>
-    <?php
-    $array = [];
-    foreach($userInfos as $userInfo) {
-        $array[] = [
-                    'userId' => $userInfo->getId(),
-                   'username' => $userInfo->getUserName(),
-                   'first_name' => $userInfo->getFirst_name(),
-                   'last_name' => $userInfo->getLast_name(),
-                    'email' => $userInfo->getEmail(),
-                   'birth_date' => $userInfo->getBirth_date(),
-                   'status' => $userInfo->getStatus()];
-    } ?>
-</div>
-<main class="container-fluid position-relative">
-    <?php if(isset($message) && !empty($message)): ?>
-        <div id="fading-alert" class="alert alert-info shadow position-absolute top-10 start-50 translate-middle upper-z-index">
-            <p class="text-center fw-bold fs-5"><?= $message ?></p>
+<main class="position-relative">
+    <?php if (!empty($message)): ?>
+        <div id="fading-alert" class="alert alert-info shadow flash-alert">
+            <p class="text-center fw-bold fs-5 mb-0"><?= htmlspecialchars((string) $message) ?></p>
         </div>
     <?php endif ?>
-    <section class="container-fluid custom-hero-container upper-z-index">
-        <div class="d-flex justify-content-center align-item-center py-5 p-0">
-            <div class="p-sm-5 pb-sm-5 mx-sm-5 bg-custom-secundary-transparent position-relative rounded-3">
-                <div>
-                    <h1 class="text-white text-center fs-1 pt-3">Bienvenue sur votre espace</h1>
-                </div>
-            </div>
+
+    <section class="custom-hero-container">
+        <div class="hero-panel bg-custom-secundary-transparent">
+            <h1 class="text-white text-center fs-1 mb-0">Espace d'administration</h1>
         </div>
     </section>
-    <section class="container-fluid p-5 bg-dark">
-        <h1 class="fs-1 text-white text-center">Espace d'administration</h1>
-    </section>
-        <section class="container-fluid p-5 bg-dark d-flex justify-content-center align-items-center flex-column">
-            <!-- Button trigger modal -->
-                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Consulter les informations utilisateurs
-                </button>
 
+    <section class="page section">
+        <div class="admin-panel bg-light shadow rounded">
+            <header class="mb-4">
+                <h2 class="fs-4 mb-1">Utilisateurs</h2>
+                <p class="text-muted mb-0">Liste des comptes — modifiez ou supprimez directement depuis chaque ligne.</p>
+            </header>
 
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog border-0 modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header border-0">
-                            <h1 class="modal-title fs-3 ms-2" id="exampleModalLabel">Informations sur les utilisateurs: </h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container">
-                                <table class="table table-striped border border-2">
-                                    <thead>
-                                    <tr>
-                                        <?php  foreach($array[0] as $key => $value) { ?>
-                                            <th scope="col"><?= $key ?></th>
-                                        <?php } ?>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php  foreach($array as $arr) { ?>
-                                        <tr>
-                                            <?php  foreach($arr as $i) { ?>
-                                                <?php if(!empty($i)) { ?>
-                                                    <td><?= $i ?></td>
-                                                <?php } else { ?>
-                                                    <td>Pas de valeur</td>
-                                                <?php } ?>
-                                            <?php } ?>
-                                        </tr>
-                                    <?php } ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+            <?php if (empty($userInfos)): ?>
+                <p class="mb-0">Aucun utilisateur en base.</p>
+            <?php else: ?>
+                <div class="admin-user-list">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Pseudo</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Statut</th>
+                            <th scope="col" class="text-end">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($userInfos as $userInfo): ?>
+                            <?php
+                            $uid = (int) $userInfo->getId();
+                            $uname = (string) ($userInfo->getUsername() ?? '');
+                            $fname = (string) ($userInfo->getFirst_name() ?? '');
+                            $lname = (string) ($userInfo->getLast_name() ?? '');
+                            $email = (string) ($userInfo->getEmail() ?? '');
+                            $birth = (string) ($userInfo->getBirth_date() ?? '');
+                            $status = (string) ($userInfo->getStatus() ?? 'user');
+                            $isSelf = isset($your_id) && (int) $your_id === $uid;
+                            ?>
+                            <tr>
+                                <td><?= $uid ?></td>
+                                <td><?= htmlspecialchars($uname) ?></td>
+                                <td><?= htmlspecialchars(trim($fname . ' ' . $lname) ?: '—') ?></td>
+                                <td><?= htmlspecialchars($email !== '' ? $email : '—') ?></td>
+                                <td><span class="badge text-bg-secondary"><?= htmlspecialchars($status) ?></span></td>
+                                <td>
+                                    <div class="admin-actions">
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm btn-primary js-edit-user"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editUserModal"
+                                            data-userid="<?= $uid ?>"
+                                            data-username="<?= htmlspecialchars($uname, ENT_QUOTES) ?>"
+                                            data-first-name="<?= htmlspecialchars($fname, ENT_QUOTES) ?>"
+                                            data-last-name="<?= htmlspecialchars($lname, ENT_QUOTES) ?>"
+                                            data-email="<?= htmlspecialchars($email, ENT_QUOTES) ?>"
+                                            data-birth-date="<?= htmlspecialchars($birth, ENT_QUOTES) ?>"
+                                            data-status="<?= htmlspecialchars($status, ENT_QUOTES) ?>"
+                                        >Modifier</button>
+
+                                        <form
+                                            action="/deleteUser"
+                                            method="post"
+                                            onsubmit="return confirm(<?= $isSelf
+                                                ? json_encode('Supprimer votre propre compte ? Vous serez déconnecté immédiatement.')
+                                                : json_encode('Supprimer le compte « ' . $uname . ' » ?')
+                                            ?>);"
+                                        >
+                                            <input type="hidden" name="username" value="<?= htmlspecialchars($uname) ?>">
+                                            <input type="hidden" name="userId" value="<?= $uid ?>">
+                                            <button class="btn btn-sm btn-danger" type="submit" name="delete">
+                                                <?= $isSelf ? 'Supprimer mon compte' : 'Supprimer' ?>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+            <?php endif; ?>
+        </div>
+    </section>
 
-        </section>
-    <section class="container-fluid">
-        <article class="row justify-content-center pt-3 mx-5 my-2 shadow bg-light rounded">
-            <div class="col-10">
-                <h1 class="fs-4 fw-bold text-center mb-2 mt-2"> Manipulations sur les utilisateurs : </h1>
-                <div class="d-flex flex-column align-items-center justify-content-center gap-2">
-                    <div class="container">
-                        <h2 class="fs-3 fw-bold text-center mb-2">Suppression de compte: </h2>
-                        <form action="/deleteUser" method="post">
-                            <div class="mb-3">
-                                <label class="form-label"  for="username">Pseudo exact:</label>
-                                <input class="form-control" id="username" type="text" name="username">
-                            </div>
-                            <div class="mb-3">
-                            <label class="form-label"  for="user-id">id de l'utilisateur:</label>
-                            <input class="form-control"  id="user-id" type="number" name="userId">
-                            </div>
-                            <div class="d-grid mt-2 mb-2">
-                            <button class="mx-5 btn btn-sm btn-danger" type="submit" name="delete">Delete this user</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="container mt-2">
-                        <h2 class="fs-3 fw-bold text-center mb-2"> Changer des informations de l'utilisateur </h2>
-                        <form action="/updateUser" method="post">
-                            <h5 class="fs-5 fw-bold mt-2 mb-2"> Identifiez l'utilisateur: </h5>
-                            <label class="form-label"  for="username">Username</label>
-                            <input class="form-control"  id="username" type="text" name="username-checked" required>
-                            <label class="form-label"  for="user-id">User id</label>
-                            <input class="form-control"  id="user-id" type="number" name="userId" required>
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="editUserModalLabel">Modifier l'utilisateur</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <form class="admin-edit-form" action="/updateUser" method="post">
+                    <div class="modal-body stack">
+                        <input type="hidden" name="username-checked" id="edit-username-checked">
+                        <input type="hidden" name="userId" id="edit-user-id">
 
-                            <h2 class="fs-5 fw-bold mt-2 mb-2"> Changer des informations: </h2>
-                            <p>- Répétez toute les informations et changer celles qu'il faut modifier -</p>
-                            <label class="form-label"  for="username-change">Pseudo:</label>
-                            <input class="form-control"  id="username-change" type="text" name="username">
-                            <label class="form-label"  for="first-name">Prénom: </label>
-                            <input class="form-control"  id="first-name" type="text" name="first_name">
-                            <label class="form-label"  for="last-name">Nom de famille: </label>
-                            <input class="form-control"  id="last-name" type="text" name="last_name">
-                            <label class="form-label"  for="birth-date">Date de naissance: </label>
-                            <input class="form-control"  id="birth-date" type="text" name="birth_date">
-                            <label class="form-label"  for="email">Email: </label>
-                            <input class="form-control"  id="email" type="text" name="email">
-                            <label class="form-label"  for="status">Status </label>
-                            <div class="mb-3">
-                                <label for="status-select">Choisir un status:</label>
-                                <select name="status" id="status-select">
+                        <div class="form-row-2">
+                            <div>
+                                <label class="form-label" for="edit-username">Pseudo</label>
+                                <input class="form-control" id="edit-username" type="text" name="username">
+                            </div>
+                            <div>
+                                <label class="form-label" for="edit-status">Statut</label>
+                                <select class="form-select" name="status" id="edit-status">
                                     <option value="user">Utilisateur</option>
                                     <option value="admin">Administrateur</option>
                                 </select>
                             </div>
-                            <div class="d-grid mx-5 mt-2 mb-2">
-                                <button class="btn btn-sm btn-success" type="submit" name="update-user">Valider les changements</button>
+                        </div>
+
+                        <div class="form-row-2">
+                            <div>
+                                <label class="form-label" for="edit-first-name">Prénom</label>
+                                <input class="form-control" id="edit-first-name" type="text" name="first_name">
                             </div>
-                        </form>
+                            <div>
+                                <label class="form-label" for="edit-last-name">Nom</label>
+                                <input class="form-control" id="edit-last-name" type="text" name="last_name">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="form-label" for="edit-email">Email</label>
+                            <input class="form-control" id="edit-email" type="email" name="email">
+                        </div>
+
+                        <div class="form-row-2">
+                            <div>
+                                <label class="form-label" for="edit-birth-date">Date de naissance</label>
+                                <input class="form-control" id="edit-birth-date" type="text" name="birth_date" placeholder="AAAA-MM">
+                            </div>
+                            <div>
+                                <label class="form-label" for="edit-password">Nouveau mot de passe</label>
+                                <input class="form-control" id="edit-password" type="password" name="password" autocomplete="new-password" placeholder="Laisser vide pour ne pas changer">
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="modal-footer form-actions border-0 pt-0">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button class="btn btn-success" type="submit" name="update-user" value="1">Enregistrer</button>
+                    </div>
+                </form>
             </div>
-        </article>
-    </section>
+        </div>
+    </div>
 </main>
+
+<script>
+document.querySelectorAll('.js-edit-user').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        document.getElementById('edit-user-id').value = btn.dataset.userid || '';
+        document.getElementById('edit-username-checked').value = btn.dataset.username || '';
+        document.getElementById('edit-username').value = btn.dataset.username || '';
+        document.getElementById('edit-first-name').value = btn.dataset.firstName || '';
+        document.getElementById('edit-last-name').value = btn.dataset.lastName || '';
+        document.getElementById('edit-email').value = btn.dataset.email || '';
+        document.getElementById('edit-birth-date').value = btn.dataset.birthDate || '';
+        document.getElementById('edit-password').value = '';
+        var status = btn.dataset.status || 'user';
+        var statusSelect = document.getElementById('edit-status');
+        statusSelect.value = status === 'admin' ? 'admin' : 'user';
+    });
+});
+</script>

@@ -9,7 +9,16 @@ class LoginController extends AbstractController
     #[Route('/login', name: "login", methods: ["GET"])]
     public function directLoginPage()
     {
-        $this->render("login.php", [], "login", ["/public/css/login.css"]);
+        $message = '';
+        if (($_GET['success'] ?? '') === 'account_deleted') {
+            $message = 'Votre compte a bien été supprimé.';
+        } elseif (($_GET['error'] ?? '') === 'auth_required') {
+            $message = 'Veuillez vous connecter pour continuer.';
+        }
+
+        $this->render("login.php", [
+            'message' => $message,
+        ], "login", ["/public/css/login.css"]);
     }
 
     #[Route('/profile', name: "profile", methods: ["GET"])]

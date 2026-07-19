@@ -48,11 +48,19 @@ class AdminController extends AbstractController
     {
         $this->requireAdmin();
 
+        $message = '';
+        if (($_GET['success'] ?? '') === 'deleted') {
+            $message = 'Utilisateur supprimé.';
+        } elseif (($_GET['success'] ?? '') === 'updated') {
+            $message = 'Utilisateur mis à jour.';
+        } elseif (!empty($_GET['error'])) {
+            $message = (string) $_GET['error'];
+        }
+
         $this->render("admin/backoffice.php", [
-            "message" => '',
+            "message" => $message,
             "userInfos" => $this->users()->getAllUsers(),
             'your_id' => $this->session()->userId(),
-            'tailwind' => [true, '/public/js/tailwind.js']
         ], "backoffice");
     }
 
@@ -66,17 +74,19 @@ class AdminController extends AbstractController
         $user = $this->users()->getByUsername($formUserName);
 
         if (!$user) {
-            $this->redirect('/?error=nousertodelete');
+            $this->redirect('/backoffice?error=nousertodelete');
         }
+
+        $isSelf = (int) $formUserId === (int) ($this->session()->userId() ?? 0);
 
         $this->users()->deleteUser($formUserId, $formUserName);
 
-        $this->render("admin/backoffice.php", [
-            "message" => $formUserName . ' a été supprimé de la base',
-            'userInfos' => $this->users()->getAllUsers(),
-            'your_id' => $this->session()->userId(),
-            'tailwind' => [false, '/public/js/tailwind.js']
-        ], "backoffice");
+        if ($isSelf) {
+            $this->session()->destroy();
+            $this->redirect('/login?success=account_deleted');
+        }
+
+        $this->redirect('/backoffice?success=deleted');
     }
 
     #[Route('/updateUser', name: "updateUser", methods: ["POST"])]
@@ -85,7 +95,7 @@ class AdminController extends AbstractController
         $this->requireAdmin();
 
         if (!isset($_POST['update-user'])) {
-            $this->redirect('/?error=nopostmethod');
+            $this->redirect('/backoffice?error=nopostmethod');
         }
 
         $UserName = filter_input(INPUT_POST, "username-checked");
@@ -93,7 +103,7 @@ class AdminController extends AbstractController
         $user = $this->users()->getByUsername((string) $UserName);
 
         if (!$user) {
-            $this->redirect('/?error=nousertoupdate');
+            $this->redirect('/backoffice?error=nousertoupdate');
         }
 
         $user->setId($formUserId);
@@ -108,10 +118,6 @@ class AdminController extends AbstractController
         ]);
         $this->users()->updateUser($user);
 
-        $this->render("admin/backoffice.php", [
-            "message" => $UserName . ' a été modifié dans la base',
-            "your_id" => $this->session()->userId(),
-            "userInfos" => $this->users()->getAllUsers(),
-        ], "backoffice");
+        $this->redirect('/backoffice?success=updated');
     }
 }

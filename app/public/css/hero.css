@@ -1,13 +1,18 @@
 @import "variables.css";
 
 .custom-hero-container {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/public/assets/ordinateur.jpg") ;
+    background-image: url("/public/assets/ordinateur.jpg");
     background-position: center;
-    background-size:cover;
+    background-size: cover;
     background-repeat: no-repeat;
-    mix-blend-mode: multiply;
 }
 
 .bg-custom-secundary-transparent {
-    background-color: var(--secundary-transparent);
+    background-color: var(--color-primary);
+    border: 2px solid var(--color-accent);
+}
+
+.custom-hero-container h1,
+.custom-hero-container h2 {
+    font-family: var(--font-display);
 }
