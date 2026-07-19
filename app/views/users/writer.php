@@ -18,8 +18,8 @@
                     <textarea class="form-control" id="content" name="content" value="pas de content"  cols="60" rows="10" placeholder="Entrez votre texte" onfocus="this.onfocus=null;" maxlength="950" value="" required ></textarea>
                 </div>
 
-                <input id="prodId" name="userId" type="hidden" value="<?= $_SESSION['userId']?>" >
-                <input id="post_author" name="post_author" type="hidden" value="<?= $_SESSION['user']?>" >
+                <input id="prodId" name="userId" type="hidden" value="<?= htmlspecialchars((string) ($_SESSION['userId'] ?? '')) ?>">
+                <input id="post_author" name="post_author" type="hidden" value="<?= htmlspecialchars((string) ($_SESSION['user'] ?? '')) ?>">
 
 
                 <div class="mb-3">
@@ -53,7 +53,7 @@
                 <th scope="col">Auteur</th>
                 <th scope="col">Titre du post</th>
                 <th scope="col">Lire</th>
-                <?php if($_SESSION['userStatus'] === 'admin') { ?>
+                <?php if(($_SESSION['userStatus'] ?? null) === 'admin') { ?>
                 <th scope="col">Suppression</th>
                 <?php } ?>
             </tr>
@@ -65,7 +65,7 @@
                     <td><?= $a_post->getAuthor_name() ?></td>
                     <td><?php echo $a_post->getTitle() ?></td>
                     <td><a href='/read?post_id=<?php echo $a_post->getIdpost() ?>'>Consulter ce post </a></td>
-                    <?php if($_SESSION['userStatus'] === 'admin') { ?>
+                    <?php if(($_SESSION['userStatus'] ?? null) === 'admin') { ?>
                         <td><a href='/deletepost?post_id=<?php echo $a_post->getIdpost() ?>'>Supprimer ce post</a></td>
                     <?php } ?>
                 </tr>

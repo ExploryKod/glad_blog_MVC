@@ -9,19 +9,17 @@ class AdminController extends AbstractController
     #[Route('/upgrade', name: "upgrade", methods: ["GET"])]
     public function becomeAdmin()
     {
+        $this->requireAuth();
         $this->render("admin/admin_test.php", [], "backoffice");
     }
 
     #[Route('/register_admin', name: "exam", methods: ["POST"])]
     public function examAdmin()
     {
+        $this->requireAuth();
+
         $userId = $this->session()->userId() ?? 0;
         $answer = htmlspecialchars($_POST['answer'] ?? '');
-
-        if ($userId <= 0) {
-            $this->render("login.php", [], "login", ["/public/css/login.css"]);
-            return;
-        }
 
         if ($answer !== 'blanc') {
             $this->render("users/profile.php", [
@@ -48,6 +46,8 @@ class AdminController extends AbstractController
     #[Route('/backoffice', name: "backOffice", methods: ["GET"])]
     public function accessBackoffice()
     {
+        $this->requireAdmin();
+
         $this->render("admin/backoffice.php", [
             "message" => '',
             "userInfos" => $this->users()->getAllUsers(),
@@ -59,6 +59,8 @@ class AdminController extends AbstractController
     #[Route('/deleteUser', name: "deleteUser", methods: ["POST"])]
     public function deleteUser()
     {
+        $this->requireAdmin();
+
         $formUserName = $_POST['username'] ?? '';
         $formUserId = intval($_POST['userId'] ?? 0);
         $user = $this->users()->getByUsername($formUserName);
@@ -80,6 +82,8 @@ class AdminController extends AbstractController
     #[Route('/updateUser', name: "updateUser", methods: ["POST"])]
     public function updateUser()
     {
+        $this->requireAdmin();
+
         if (!isset($_POST['update-user'])) {
             $this->redirect('/?error=nopostmethod');
         }

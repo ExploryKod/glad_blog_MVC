@@ -72,6 +72,31 @@ abstract class AbstractController
     }
 
     /**
+     * Exige un utilisateur connecté, sinon redirection vers /login.
+     *
+     * @return void
+     */
+    protected function requireAuth(): void
+    {
+        if (!$this->session()->isLoggedIn()) {
+            $this->redirect('/login?error=auth_required');
+        }
+    }
+
+    /**
+     * Exige un administrateur connecté.
+     *
+     * @return void
+     */
+    protected function requireAdmin(): void
+    {
+        $this->requireAuth();
+        if (!$this->session()->isAdmin()) {
+            $this->redirect('/profile?error=admin_required');
+        }
+    }
+
+    /**
      * Assemble le layout (header + vue + base) et envoie la réponse HTML.
      *
      * @param string $view Chemin relatif sous views/
