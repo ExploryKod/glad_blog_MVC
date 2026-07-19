@@ -1,5 +1,5 @@
 ﻿<p align="center">
-  <img width="30%" src="https://www.pexels.com/photo/turned-on-macbook-air-beside-black-iphone-4-cup-of-tea-and-notebook-on-brown-wooden-surface-265667" />
+  <img width="30%" src="./pexels-pixabay-265667.jpg" />
 </p>
 
 # <p align="center">Glad Blog </a></p>
