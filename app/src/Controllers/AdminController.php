@@ -22,14 +22,16 @@ class AdminController extends AbstractController
     public function examAdmin() {
         $styleLinks = [];
         $scripts = [];
-        $userId = intval($_SESSION['userId']);
-        $badge = 'admin';
-        $answer = htmlspecialchars($_POST['answer']);
-        if(isset($userId))  {
+        $userId = intval($_SESSION['userId'] ?? 0);
+        $answer = htmlspecialchars($_POST['answer'] ?? '');
+        if($userId > 0)  {
             if($answer === 'blanc') {
                 $_SESSION['userStatus'] = 'admin';
                 $userManager = new UserManager(new PDOFactory());
-                $userManager->setAdminRights($userId, $badge);
+                $user = $userManager->getByUserid((string) $userId);
+                if ($user) {
+                    $userManager->setAdminRights($user);
+                }
                 $users = $userManager->getAllUsers();
                 $this->render("admin/backoffice.php", [
                     'message' => 'Bienvenue dans le cercle des administrateurs',
@@ -109,8 +111,8 @@ class AdminController extends AbstractController
                 $user = $userManager->getByUsername($UserName);
 
                 if($user) {
-                    $args = [];
-                    $updateFeed = [
+                    $user->setId($formUserId);
+                    $user->applyUpdates([
                         'first_name' => filter_input( INPUT_POST, "first_name") ?? null,
                         'last_name' => filter_input( INPUT_POST, "last_name") ?? null,
                         'email' => filter_input( INPUT_POST, "email") ?? null,
@@ -118,14 +120,8 @@ class AdminController extends AbstractController
                         'password' => filter_input( INPUT_POST, "password") ?? null,
                         'username' => filter_input( INPUT_POST, "username") ?? null,
                         'status' => filter_input( INPUT_POST, "status") ?? null,
-                    ];
-                    foreach($updateFeed as $key => $value) {
-                        if($value !== null) {
-                            $args[$key] = $value;
-                        }
-                    }
-
-                    $userManager->updateUser($formUserId, $UserName, $args);
+                    ]);
+                    $userManager->updateUser($user);
                     $userId = intval($_SESSION['userId']);
                     $styleLinks = [];
                     $scripts = [];

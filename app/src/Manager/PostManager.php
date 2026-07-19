@@ -20,25 +20,28 @@ class PostManager extends BaseManager
         return $posts;
     }
 
-    public function insertNewPost(string $title, string $content, string $author_name, int $articleStatus, string $image, $author): array
+    public function insertNewPost(Post $post): void
     {
         $query = $this->pdo->prepare("INSERT INTO posts (content, title, public, image, author_name, author, post_date)
                                                 VALUES (:content, :title, :public, :image, :author_name, :author, NOW())");
-        $query->bindValue("content", $content, \PDO::PARAM_STR);
-        $query->bindValue("title", $title, \PDO::PARAM_STR);
-        $query->bindValue("public", $articleStatus, \PDO::PARAM_STR);
-        $query->bindValue("image", $image, \PDO::PARAM_STR);
-        $query->bindValue("author_name", $author_name, \PDO::PARAM_STR);
-        $query->bindValue("author", $author, \PDO::PARAM_INT);
+        $query->bindValue("content", $post->getContent(), \PDO::PARAM_STR);
+        $query->bindValue("title", $post->getTitle(), \PDO::PARAM_STR);
+        $query->bindValue("public", $post->getArticleStatus(), \PDO::PARAM_INT);
+        $query->bindValue("image", $post->getImage(), \PDO::PARAM_STR);
+        $query->bindValue("author_name", $post->getAuthor_name(), \PDO::PARAM_STR);
+        $query->bindValue("author", $post->getAuthor(), \PDO::PARAM_INT);
         $query->execute();
+    }
 
-        $complexPosts = [];
-        while ($data = $query->fetch(\PDO::FETCH_ASSOC)) {
-            $complexPosts[] = new Post($data);
-        }
-
-        return $complexPosts;
-
+    /**
+     * @return Post[]
+     */
+    public function getPublicPosts(): array
+    {
+        return array_values(array_filter(
+            $this->getAllPosts(),
+            static fn(Post $post): bool => $post->isPublic()
+        ));
     }
 
     public function getPost($post_id) {

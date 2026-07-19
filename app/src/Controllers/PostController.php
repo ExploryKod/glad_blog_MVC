@@ -5,6 +5,8 @@
 // (nécessaire pour instancier le PostManager car il l'a en param: un objet en param donc un PDO particulier)
 
 namespace Gladblog\Controllers;
+use Gladblog\Entity\Post;
+use Gladblog\Exception\DomainException;
 use Gladblog\Factory\PDOFactory;
 use Gladblog\Manager\PostManager;
 use Gladblog\Route\Route;
@@ -16,7 +18,7 @@ class PostController extends AbstractController
     public function home()
     {
         $showAllPosts = new PostManager(new PDOFactory());
-        $posts = $showAllPosts->getAllPosts();
+        $posts = $showAllPosts->getPublicPosts();
 
         $styleLinks = [];
         $scripts = [];
@@ -66,13 +68,20 @@ class PostController extends AbstractController
         if(isset($_POST['register_article'])) {
 
             $postManager = new PostManager(new PDOFactory());
-            $title = filter_input(INPUT_POST, 'title');
-            $content = filter_input(INPUT_POST, 'content');
-            $author_name = filter_input(INPUT_POST, 'post_author');
-            $article_status = filter_input(INPUT_POST, 'article_status');
-            $authorId = filter_input(INPUT_POST, 'userId');
-            $image = filter_input(INPUT_POST, 'image');
-            $postManager->insertNewPost($title, $content, $author_name, $article_status, $image, $authorId);
+            try {
+                $post = Post::compose(
+                    (string) filter_input(INPUT_POST, 'title'),
+                    (string) filter_input(INPUT_POST, 'content'),
+                    (string) filter_input(INPUT_POST, 'post_author'),
+                    (int) filter_input(INPUT_POST, 'userId'),
+                    (int) filter_input(INPUT_POST, 'article_status'),
+                    (string) filter_input(INPUT_POST, 'image')
+                );
+                $postManager->insertNewPost($post);
+            } catch (DomainException $e) {
+                header('Location: /writer?error=' . urlencode($e->getMessage()));
+                exit();
+            }
             header('Location: /writer?success=newarticle');
             exit();
         } else   {

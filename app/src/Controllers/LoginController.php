@@ -42,8 +42,6 @@ class LoginController extends AbstractController
         $formPwd = $_POST['password'];
         $userManager = new UserManager(new PDOFactory());
         $user = $userManager->getByUsername($formUsername);
-        $userId = $userManager->getByUsername($formUsername)->getId();
-        $userStatus = $userManager->getByUsername($formUsername)->getStatus();
         $links = [];
         $scripts = [];
 
@@ -52,20 +50,18 @@ class LoginController extends AbstractController
             $links = ["/public/css/login.css"];
             $this->render("login.php", [
                 "message" => $message,
-                "userData" => $userManager->getByUsername($formUsername)->getUsername(),
-                "status" => $userManager->getByUsername($formUsername)->getStatus(),
-                "hash" => $userManager->getByUsername($formUsername)->getHashedPassword(),
                 "data" => $_POST
             ],
                 "Utilisateur Inconnu", $links, $scripts);
+            return;
         }
 
         if ($user->passwordMatch($formPwd))  {
 
             if(empty($_SESSION['userId'])) {
-                $_SESSION['user'] = $formUsername;
-                $_SESSION['userId'] = $userId;
-                $_SESSION['userStatus'] = $userStatus;
+                $_SESSION['user'] = $user->getUsername();
+                $_SESSION['userId'] = $user->getId();
+                $_SESSION['userStatus'] = $user->getStatus();
                 $message = 'Bonjour '.$_SESSION['user'].', vous êtes bien connecté.';
             } else {
                 $message = 'Bonjour '.$_SESSION['user'].'. Vous êtes toujours connecté.';
@@ -73,8 +69,8 @@ class LoginController extends AbstractController
 
             $this->render("users/profile.php", [
                 "message" => $message,
-                "userData" => $userManager->getByUsername($formUsername)->getUsername(),
-                "status" => $userManager->getByUsername($formUsername)->getStatus(),
+                "userData" => $user->getUsername(),
+                "status" => $user->getStatus(),
                 "data" => $_POST
             ],
                 "profile", $links, $scripts);

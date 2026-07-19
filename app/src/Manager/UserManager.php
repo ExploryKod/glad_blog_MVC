@@ -24,7 +24,7 @@ class UserManager extends BaseManager
     public function getByUserid(string $userId): ?User
     {
         $query = $this->pdo->prepare("SELECT * FROM user WHERE id = :userId");
-        $query->bindValue("username", $userId, \PDO::PARAM_STR);
+        $query->bindValue("userId", $userId, \PDO::PARAM_INT);
         $query->execute();
         $data = $query->fetch(\PDO::FETCH_ASSOC);
 
@@ -51,44 +51,28 @@ class UserManager extends BaseManager
         return null;
     }
 
-    /**
-     * @param mixed $plainPassword
-     * @param array $cost
-     * @return string
-     */
-    private function makeHashedPassword(mixed $plainPassword, array $cost = ['cost' => 12]) : string   {
-        $password = password_hash($plainPassword, PASSWORD_BCRYPT, $cost);
-        return $password;
-    }
-
-    /**
-     * @param string|null $password
-     * @param string|null $username
-     * @return void
-     */
-    public function insertUser(string | null $password, string | null $username, string | null $first_name, string | null $last_name, string | null $birth_date, string | null $email) : void
+    public function insertUser(User $user): void
     {
-        $cost = ['cost' => 12];
-        $password = $this->makeHashedPassword($password, $cost);
-        $status = 'user';
         $query = $this->pdo->prepare("INSERT INTO user (password, username, first_name, last_name, email, birth_date, status, creation_date) 
                                             VALUES (:password, :username, :first_name, :last_name, :email, :birth_date, :status, NOW())");
-        $query->bindValue("password", $password, \PDO::PARAM_STR);
-        $query->bindValue("username", $username, \PDO::PARAM_STR);
-        $query->bindValue("first_name", $first_name, \PDO::PARAM_STR);
-        $query->bindValue("last_name", $last_name, \PDO::PARAM_STR);
-        $query->bindValue("email", $email, \PDO::PARAM_STR);
-        $query->bindValue("birth_date", $birth_date, \PDO::PARAM_STR);
-        $query->bindValue("status", $status, \PDO::PARAM_STR);
+        $query->bindValue("password", $user->getHashedPassword(), \PDO::PARAM_STR);
+        $query->bindValue("username", $user->getUsername(), \PDO::PARAM_STR);
+        $query->bindValue("first_name", $user->getFirst_name(), \PDO::PARAM_STR);
+        $query->bindValue("last_name", $user->getLast_name(), \PDO::PARAM_STR);
+        $query->bindValue("email", $user->getEmail(), \PDO::PARAM_STR);
+        $query->bindValue("birth_date", $user->getBirth_date(), \PDO::PARAM_STR);
+        $query->bindValue("status", $user->getStatus() ?? User::STATUS_USER, \PDO::PARAM_STR);
         $query->execute();
     }
 
-    public function setAdminRights(int $userId, string $status)  {
+    public function setAdminRights(User $user): void
+    {
+        $user->promoteToAdmin();
 
         $query = $this->pdo->prepare("UPDATE user SET status = :status WHERE id=:userId ");
         $query->execute([
-            'status' => $status,
-            'userId' => $userId
+            'status' => $user->getStatus(),
+            'userId' => $user->getId()
         ]);
     }
 
@@ -105,72 +89,28 @@ class UserManager extends BaseManager
         $dropUserReq->execute();
     }
 
-    /**
-     * @param int|null $userId
-     * @param string|null $username
-     * @param array $args
-     * @return void
-     */
-    public function updateUser(int | null $userId, string | null $username, array $args = []): void
+    public function updateUser(User $user): void
     {
-
-        if(!empty($args)) {
-            foreach($args as $key => $value) {
-                if(!empty($key)){
-                    switch ($key) {
-                        case 'username':
-                            $username = $args['username'];
-                            $query = $this->pdo->prepare("UPDATE user SET username = :username WHERE id=:userId ");
-                            $query->bindValue("username", $username, \PDO::PARAM_STR);
-                            $query->bindValue("userId", $userId, \PDO::PARAM_STR);
-                            $query->execute();
-                            break;
-                        case 'password':
-                            $password = $args['password'];
-                            $query = $this->pdo->prepare("UPDATE user SET password = :password WHERE id=:userId ");
-                            $query->bindValue("password", $password, \PDO::PARAM_STR);
-                            $query->bindValue("userId", $userId, \PDO::PARAM_STR);
-                            $query->execute();
-                            break;
-                        case 'first_name':
-                            $first_name = $args['first_name'];
-                            $query = $this->pdo->prepare("UPDATE user SET first_name = :first_name WHERE id=:userId ");
-                            $query->bindValue("first_name", $first_name, \PDO::PARAM_STR);
-                            $query->bindValue("userId", $userId, \PDO::PARAM_STR);
-                            $query->execute();
-                            break;
-                        case 'last_name':
-                            $last_name = $args['last_name'];
-                            $query = $this->pdo->prepare("UPDATE user SET last_name = :last_name WHERE id=:userId ");
-                            $query->bindValue("last_name", $last_name, \PDO::PARAM_STR);
-                            $query->bindValue("userId", $userId, \PDO::PARAM_STR);
-                            $query->execute();
-                            break;
-                        case 'birth_date':
-                            $birth_date = $args['birth_date'];
-                            $query = $this->pdo->prepare("UPDATE user SET birth_date = :birth_date WHERE id=:userId ");
-                            $query->bindValue("birth_date", $birth_date, \PDO::PARAM_STR);
-                            $query->bindValue("userId", $userId, \PDO::PARAM_STR);
-                            $query->execute();
-                            break;
-                        case 'email':
-                            $email = $args['email'];
-                            $query = $this->pdo->prepare("UPDATE user SET email = :email WHERE id=:userId ");
-                            $query->bindValue("email", $email, \PDO::PARAM_STR);
-                            $query->bindValue("userId", $userId, \PDO::PARAM_STR);
-                            $query->execute();
-                            break;
-                        case 'status':
-                            $status = $args['status'];
-                            $query = $this->pdo->prepare("UPDATE user SET status = :status WHERE id=:userId ");
-                            $query->bindValue("status", $status, \PDO::PARAM_STR);
-                            $query->bindValue("userId", $userId, \PDO::PARAM_STR);
-                            $query->execute();
-                            break;
-
-                    }
-                }
-            }
-        }
+        $query = $this->pdo->prepare(
+            "UPDATE user SET
+                username = :username,
+                password = :password,
+                first_name = :first_name,
+                last_name = :last_name,
+                email = :email,
+                birth_date = :birth_date,
+                status = :status
+             WHERE id = :userId"
+        );
+        $query->execute([
+            'username' => $user->getUsername(),
+            'password' => $user->getHashedPassword(),
+            'first_name' => $user->getFirst_name(),
+            'last_name' => $user->getLast_name(),
+            'email' => $user->getEmail(),
+            'birth_date' => $user->getBirth_date(),
+            'status' => $user->getStatus(),
+            'userId' => $user->getId(),
+        ]);
     }
 }
