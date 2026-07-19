@@ -8,7 +8,7 @@ use Gladblog\Route\Route;
 
 class CommentsController extends AbstractController
 {
-    #[Route('/register_comment', name: "comment", methods: ["POST", "GET"])]
+    #[Route('/register_comment', name: "comment", methods: ["POST"])]
     public function register_comment()
     {
         $id_post = intval($_POST['id_post'] ?? 0);
@@ -22,17 +22,9 @@ class CommentsController extends AbstractController
                 $this->session()->isAdmin()
             );
             $this->comments()->insertNewComment($comment);
-            $message = 'Vous avez bien commenté le post n°' . $id_post . '.';
+            $this->redirect('/read?post_id=' . $id_post . '&success=comment');
         } catch (DomainException $e) {
-            $message = $e->getMessage();
+            $this->redirect('/read?post_id=' . $id_post . '&error=' . urlencode($e->getMessage()));
         }
-
-        $this->render("users/writer.php", [
-            'message' => $message,
-            'posts' => $this->posts()->getAllPosts(),
-            'comment' => $this->comments()->getComment($id_post),
-            'comments' => $this->comments()->getAllComments(),
-            'post_id' => $id_post
-        ], "Espace de lecture");
     }
 }

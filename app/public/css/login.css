@@ -19,7 +19,7 @@ a{
     max-width:80vw;
     min-height:100vh;
     position:relative;
-    background:url(https://images.pexels.com/photos/540518/pexels-photo-540518.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1) no-repeat center;
+    background:url(/public/assets/ordinateur.jpg) no-repeat center;
     background-size: cover;
     box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
 }

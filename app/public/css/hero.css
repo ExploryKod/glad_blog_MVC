@@ -1,7 +1,7 @@
 @import "variables.css";
 
 .custom-hero-container {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("https://picsum.photos/1000/1000") ;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/public/assets/ordinateur.jpg") ;
     background-position: center;
     background-size:cover;
     background-repeat: no-repeat;
