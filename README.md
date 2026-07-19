@@ -8,7 +8,7 @@ Un simple blog qui fait un CRUD mais écrit en php pure pour apprendre les fonda
 
 ## Buts
 
-Le but est essentiellement d'apprendre PHP sur un simple CRUD, une authentification minimaliste, monter un premier projet en production, créer un environnement de dev avec Docker et appréhender certains design pattern essentiels. Je le présente car il est intéressant sur certains plan et fut une de mes premières étapes dans l'exploration de PHP.
+Le but est essentiellement d'apprendre PHP sur un simple CRUD, une authentification minimaliste, monter un premier projet en production, créer un environnement de dev avec Docker et appréhender certains design pattern essentiels. Je le présente car il est intéressant sur certains plans et fut une de mes premières étapes dans l'exploration de PHP.
 
 **Remarque**: Le projet est loin d'être un projet fini et malgré quelques ajouts récent il est ancien. Il lui manque des couches de sécurité, des design pattern essentiels, une gestion des tests et bien d'autres aspects.
 
