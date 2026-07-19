@@ -23,10 +23,10 @@
 
 
                 <div class="mb-3">
-                    <label class="form-label" for="image">Votre photo (copier un lien depuis internet) <span>*</span> :</label>
-                    <input  class="form-control" type="url" name="image" id="image"
-                            placeholder="https://example.com" pattern="https://.*" size="30"
-                            value="https://images.pexels.com/photos/12704642/pexels-photo-12704642.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                    <label class="form-label" for="image">Image de l'article (URL ou chemin local) <span>*</span> :</label>
+                    <input class="form-control" type="text" name="image" id="image"
+                            placeholder="/public/assets/ordinateur.jpg"
+                            value="/public/assets/ordinateur.jpg"
                             required>
                 </div>
 
