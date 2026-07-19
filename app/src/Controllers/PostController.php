@@ -1,133 +1,89 @@
 <?php
-// Je requière mon model (ici Post qui a lui-même requis l'entité Post)
-// D'où le namespace doit être utilisé pour accéder en direct à la class PostManager
-// Mais via composition, je requière aussi la factory c'est à dire ici un PDO
-// (nécessaire pour instancier le PostManager car il l'a en param: un objet en param donc un PDO particulier)
 
 namespace Gladblog\Controllers;
+
 use Gladblog\Entity\Post;
 use Gladblog\Exception\DomainException;
-use Gladblog\Factory\PDOFactory;
-use Gladblog\Manager\PostManager;
 use Gladblog\Route\Route;
-use Gladblog\Manager\CommentsManager;
 
 class PostController extends AbstractController
 {
     #[Route('/', name: "homepage", methods: ["GET"])]
     public function home()
     {
-        $showAllPosts = new PostManager(new PDOFactory());
-        $posts = $showAllPosts->getPublicPosts();
-
-        $styleLinks = [];
-        $scripts = [];
-
         $this->render("home.php", [
-            "posts" => $posts
-        ], "Votre homepage", $styleLinks, $scripts);
+            "posts" => $this->posts()->getPublicPosts()
+        ], "Votre homepage");
     }
 
     #[Route('/writer', name: "writerpage", methods: ["GET"])]
     public function writerByGet()
     {
-     $postId = $_GET['id'] ?? null;
-     $showAllPosts = new PostManager(new PDOFactory());
-     $posts = $showAllPosts->getAllPosts();
-     if(isset($postId)) {
-         $showAllPosts->deletePost($postId);
-         header('Location: /writer?success=deletedpost');
-     }
+        $postId = $_GET['id'] ?? null;
+        if (isset($postId)) {
+            $this->posts()->deletePost($postId);
+            $this->redirect('/writer?success=deletedpost');
+        }
 
-    $styleLinks = [];
-    $scripts = [];
-
-    $this->render("users/writer.php", [
-        'posts' => $posts ?? null
-    ], "Espace d'écriture", $styleLinks, $scripts);
+        $this->render("users/writer.php", [
+            'posts' => $this->posts()->getAllPosts()
+        ], "Espace d'écriture");
     }
 
     #[Route('/writer', name: "writer", methods: ["POST"])]
     public function writerByPost()
     {
-        $showAllPosts = new PostManager(new PDOFactory());
-        $posts = $showAllPosts->getAllPosts();
-
-        $styleLinks = [];
-        $scripts = [];
-
         $this->render("users/writer.php", [
-            'posts' => $posts
-        ], "Espace d'écriture", $styleLinks, $scripts);
+            'posts' => $this->posts()->getAllPosts()
+        ], "Espace d'écriture");
     }
-
 
     #[Route('/register_post', name: "writer", methods: ["POST"])]
     public function register_post()
     {
-        if(isset($_POST['register_article'])) {
-
-            $postManager = new PostManager(new PDOFactory());
-            try {
-                $post = Post::compose(
-                    (string) filter_input(INPUT_POST, 'title'),
-                    (string) filter_input(INPUT_POST, 'content'),
-                    (string) filter_input(INPUT_POST, 'post_author'),
-                    (int) filter_input(INPUT_POST, 'userId'),
-                    (int) filter_input(INPUT_POST, 'article_status'),
-                    (string) filter_input(INPUT_POST, 'image')
-                );
-                $postManager->insertNewPost($post);
-            } catch (DomainException $e) {
-                header('Location: /writer?error=' . urlencode($e->getMessage()));
-                exit();
-            }
-            header('Location: /writer?success=newarticle');
-            exit();
-        } else   {
-            header('Location: /writer?error=submitnull');
-            exit();
+        if (!isset($_POST['register_article'])) {
+            $this->redirect('/writer?error=submitnull');
         }
+
+        try {
+            $post = Post::compose(
+                (string) filter_input(INPUT_POST, 'title'),
+                (string) filter_input(INPUT_POST, 'content'),
+                (string) filter_input(INPUT_POST, 'post_author'),
+                (int) filter_input(INPUT_POST, 'userId'),
+                (int) filter_input(INPUT_POST, 'article_status'),
+                (string) filter_input(INPUT_POST, 'image')
+            );
+            $this->posts()->insertNewPost($post);
+        } catch (DomainException $e) {
+            $this->redirect('/writer?error=' . urlencode($e->getMessage()));
+        }
+
+        $this->redirect('/writer?success=newarticle');
     }
 
     #[Route('/read', name: "read", methods: ["GET", "POST"])]
     public function read_single_post()
     {
-            $post_id = intval($_GET['post_id']);
-            $postManager = new PostManager(new PDOFactory());
-            $commentsManager = new CommentsManager(new PDOFactory());
-            $thePost = $postManager->getPost($post_id);
-            $posts = $postManager->getAllPosts();
-            $comment = $commentsManager->getComment($post_id);
+        $post_id = intval($_GET['post_id'] ?? 0);
 
-            $styleLinks = [];
-            $scripts = [];
-
-            $this->render("users/read.php", [
-                'comment' => $comment,
-                'posts' => $posts,
-                'thePost' => $thePost,
-                'id_post' => $post_id,
-            ], "Espace de lecture", $styleLinks, $scripts);
-
+        $this->render("users/read.php", [
+            'comment' => $this->comments()->getComment($post_id),
+            'posts' => $this->posts()->getAllPosts(),
+            'thePost' => $this->posts()->getPost($post_id),
+            'id_post' => $post_id,
+        ], "Espace de lecture");
     }
 
     #[Route('/deletepost', name: "deletepost", methods: ["GET"])]
     public function delete_single_post()
     {
-
-        $post_id = intval($_GET['post_id']);
-        $postManager = new PostManager(new PDOFactory());
-        $postManager->deletePost($post_id);
-        $posts = $postManager->getAllPosts();
-
-        $styleLinks = [];
-        $scripts = [];
+        $post_id = intval($_GET['post_id'] ?? 0);
+        $this->posts()->deletePost($post_id);
 
         $this->render("users/writer.php", [
-            'posts' => $posts,
-            'message' => 'Le post n°'.$post_id.' a bien été supprimé.'
-        ], "Espace d'écriture", $styleLinks, $scripts);
-
+            'posts' => $this->posts()->getAllPosts(),
+            'message' => 'Le post n°' . $post_id . ' a bien été supprimé.'
+        ], "Espace d'écriture");
     }
 }

@@ -1,14 +1,13 @@
 <?php
 
-//use Gladblog\Controllers\PostController;
-//use Symfony\Component\Yaml\Yaml;
-//require_once "vendor/autoload.php";
-//$yaml = Yaml::parseFile(dirname(__FILE__) . "/config/routes.yml");
-//$controller = new PostController();
-
+use Gladblog\Container\AppContainer;
+use Gladblog\Controllers\AbstractController;
 use Gladblog\Route\Route;
 
 require_once 'vendor/autoload.php';
+
+$app = new AppContainer();
+$app->session()->start();
 
 $controllerDir = dirname(__FILE__) . '/src/Controllers';
 
@@ -20,7 +19,19 @@ foreach ($dirs as $dir) {
         continue;
     }
 
-    $controllers[] = "Gladblog\\Controllers\\" . pathinfo($controllerDir . DIRECTORY_SEPARATOR . $dir)['filename'];
+    $className = "Gladblog\\Controllers\\" . pathinfo($controllerDir . DIRECTORY_SEPARATOR . $dir)['filename'];
+
+    // Ignorer la classe abstraite et les helpers sans routes
+    if ($className === AbstractController::class || !class_exists($className)) {
+        continue;
+    }
+
+    $reflection = new ReflectionClass($className);
+    if ($reflection->isAbstract()) {
+        continue;
+    }
+
+    $controllers[] = $className;
 }
 
 $routesObj = [];
@@ -31,7 +42,6 @@ foreach ($controllers as $controller) {
     foreach ($reflection->getMethods() as $method) {
         foreach ($method->getAttributes() as $attribute) {
             /** @var Route $route */
-
             $route = $attribute->newInstance();
             $route->setController($controller)
                 ->setAction($method->getName());
@@ -41,11 +51,10 @@ foreach ($controllers as $controller) {
     }
 }
 
-// trim pour supprimer les slash en début et en fin de chaîne (ce qui fait que je rajoute ensuite afin d'avoir de la lisibilité mais c pas obligé)
 $url = "/" . trim(explode("?", $_SERVER['REQUEST_URI'])[0], "/");
 
 foreach ($routesObj as $route) {
-    if (!$route->match($url) || !in_array($_SERVER['REQUEST_METHOD'], $route->getMethods())) {
+    if (!$route->match($url) || !in_array($_SERVER['REQUEST_METHOD'], $route->getMethods(), true)) {
         continue;
     }
 
@@ -53,7 +62,7 @@ foreach ($routesObj as $route) {
     $action = $route->getAction();
     $params = $route->mergeParams($url);
 
-    new $controlerClassName($action, $params);
+    new $controlerClassName($app, $action, $params);
     exit();
 }
 
