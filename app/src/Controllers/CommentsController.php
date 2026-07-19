@@ -3,6 +3,8 @@ namespace Gladblog\Controllers;
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+use Gladblog\Entity\Comments;
+use Gladblog\Exception\DomainException;
 use Gladblog\Factory\PDOFactory;
 use Gladblog\Manager\CommentsManager;
 use Gladblog\Manager\PostManager;
@@ -13,30 +15,37 @@ class CommentsController extends AbstractController
     #[Route('/register_comment', name: "comment", methods: ["POST", "GET"])]
     public function register_comment()
     {
-
-        $author_comment = htmlspecialchars($_POST['author_comment']);
-        $content_comment = htmlspecialchars($_POST['content_comment']);
-        $id_post = intval($_POST['id_post']);
-        $post_title = htmlspecialchars($_POST['post_title']);
-        $user_id = intval($_POST['userId']);
-        $admin_comment = 0;
         $PostsManager = new PostManager(new PDOFactory());
         $CommentsManager = new CommentsManager(new PDOFactory());
+        $id_post = intval($_POST['id_post'] ?? 0);
         $posts = $PostsManager->getAllPosts();
         $comments = $CommentsManager->getAllComments();
-        $comment = $CommentsManager->getComment($id_post);
-        $CommentsManager->insertNewComment($author_comment, $content_comment, $id_post, $post_title, $admin_comment);
-        $message = "";
+        $commentList = $CommentsManager->getComment($id_post);
+
+        try {
+            $fromAdmin = !empty($_SESSION['userStatus']) && $_SESSION['userStatus'] === 'admin';
+            $comment = Comments::write(
+                htmlspecialchars((string) ($_POST['author_comment'] ?? '')),
+                htmlspecialchars((string) ($_POST['content_comment'] ?? '')),
+                $id_post,
+                htmlspecialchars((string) ($_POST['post_title'] ?? '')),
+                $fromAdmin
+            );
+            $CommentsManager->insertNewComment($comment);
+            $message = 'Vous avez bien commenté le post n°' . $id_post . '.';
+        } catch (DomainException $e) {
+            $message = $e->getMessage();
+        }
+
         $styleLinks = [];
         $scripts = [];
 
         $this->render("users/writer.php", [
-            'message' => 'Vous avez bien commenté le post n°'.$id_post.'.',
+            'message' => $message,
             'posts' => $posts,
-            'comment' => $comment,
+            'comment' => $commentList,
             'comments' => $comments,
             'post_id' => $id_post
         ], "Espace de lecture", $styleLinks, $scripts);
-
     }
 }

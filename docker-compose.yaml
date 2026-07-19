@@ -10,6 +10,9 @@ services:
             - "1300:80"
         volumes:
             - ./app:/var/www/html
+        command: >
+            bash -c "composer install --no-interaction --prefer-dist
+            && apache2-foreground"
 
     database:
         image: mariadb

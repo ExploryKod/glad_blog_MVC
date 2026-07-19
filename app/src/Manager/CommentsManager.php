@@ -33,24 +33,17 @@ class CommentsManager extends BaseManager
         return $comments;
     }
 
-    public function insertNewComment(string $author_comment, string $content_comment, int $id_post, string $post_title, int $admin_comment): array
+    public function insertNewComment(Comments $comment): void
     {
-        $query = $this->pdo->prepare("INSERT INTO comments (author_comment, content_comment, id_post, post_title, admin_comment, publish_date)
-                                                VALUES (:author_comment, :content_comment, :id_post, :post_title, :admin_comment, NOW()) LIMIT 1");
+        $query = $this->pdo->prepare("INSERT INTO comments (author_comment, content_comment, id_post, post_title, admin_comment, id_upper_comment, publish_date)
+                                                VALUES (:author_comment, :content_comment, :id_post, :post_title, :admin_comment, :id_upper_comment, NOW())");
         $query->execute([
-            'author_comment' => $author_comment,
-            'content_comment' => $content_comment,
-            'id_post' => $id_post,
-            'post_title' => $post_title,
-            'admin_comment' => $admin_comment
+            'author_comment' => $comment->getAuthor_comment(),
+            'content_comment' => $comment->getContent_comment(),
+            'id_post' => $comment->getId_post(),
+            'post_title' => $comment->getPost_title(),
+            'admin_comment' => $comment->getAdmin_comment() ?? 0,
+            'id_upper_comment' => $comment->getId_upper_comment(),
         ]);
-
-        $newComments = [];
-        while ($data = $query->fetch(\PDO::FETCH_ASSOC)) {
-            $newComments[] = new Comments($data);
-        }
-
-        return $newComments;
-
     }
 }

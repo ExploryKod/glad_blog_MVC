@@ -1,127 +1,184 @@
 <?php
-// Model => l'entity va créer les getter et setter qui vont être utilisé par le manager pour envoyer en BDD
-// SETTER pour envoyer à la BDD et getter pour prendre de la la BDD
-// Nous utilisons baseEntity afin d'hydrater avec la data
-// Grâce à l'hydrator et BaseEntity on a plus qu'à faire $this->id (si getter pour prendre le contenu existant) ou $this->id = $id pour créer le contenu et ça marche (lisibilité)
-// Avec cette class on pourra fournir les id, content et author
 
 namespace Gladblog\Entity;
 
+use Gladblog\Exception\DomainException;
+
 class Post extends BaseEntity
 {
-    private int | null $postid;
-    private string | null $content;
-    private int | null $author;
-    private string | null $author_name;
-    private string | null $title;
-    private int | null $articleStatus;
-    private string | null $image;
+    public const STATUS_PUBLIC = 1;
+    public const STATUS_PRIVATE = 2;
+
+    private int | null $postid = null;
+    private string | null $content = null;
+    private int | null $author = null;
+    private string | null $author_name = null;
+    private string | null $title = null;
+    private int | null $articleStatus = null;
+    private string | null $image = null;
 
     /**
-     * @return int
+     * Crée un article prêt à être persisté, avec validation métier.
      */
+    public static function compose(
+        string $title,
+        string $content,
+        string $authorName,
+        int $authorId,
+        int $visibility,
+        string $image
+    ): self {
+        $title = trim($title);
+        $content = trim($content);
+
+        if ($title === '') {
+            throw new DomainException('Le titre de l\'article est obligatoire.');
+        }
+        if ($content === '') {
+            throw new DomainException('Le contenu de l\'article est obligatoire.');
+        }
+        if (!in_array($visibility, [self::STATUS_PUBLIC, self::STATUS_PRIVATE], true)) {
+            throw new DomainException('Visibilité invalide (public=1, privé=2).');
+        }
+        if ($authorId <= 0) {
+            throw new DomainException('Auteur invalide.');
+        }
+
+        $post = new self();
+        $post->setTitle($title)
+            ->setContent($content)
+            ->setAuthor_name($authorName)
+            ->setAuthor($authorId)
+            ->setArticleStatus($visibility)
+            ->setImage($image);
+
+        return $post;
+    }
+
     public function getIdpost(): int | null
     {
         return $this->postid;
     }
 
-    /**
-     * @param int $postid
-     * @return Post
-     */
     public function setIdpost(int | null $postid): Post | null
     {
         $this->postid = $postid;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getArticleStatus(): int | null
     {
         return $this->articleStatus;
     }
 
-    /**
-     * @param int $articleStatus
-     * @return Post
-     */
     public function setArticleStatus(int | null $articleStatus): Post
     {
         $this->articleStatus = $articleStatus;
         return $this;
     }
 
-
     /**
-     * @return string|null
+     * Alias d’hydratation pour la colonne SQL `public`.
      */
+    public function getPublic(): int | null
+    {
+        return $this->articleStatus;
+    }
+
+    public function setPublic(int | null $public): Post
+    {
+        $this->articleStatus = $public;
+        return $this;
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->articleStatus === self::STATUS_PUBLIC;
+    }
+
+    public function isPrivate(): bool
+    {
+        return $this->articleStatus === self::STATUS_PRIVATE;
+    }
+
+    public function publish(): self
+    {
+        $this->articleStatus = self::STATUS_PUBLIC;
+        return $this;
+    }
+
+    public function makePrivate(): self
+    {
+        $this->articleStatus = self::STATUS_PRIVATE;
+        return $this;
+    }
+
+    public function isOwnedBy(?int $userId): bool
+    {
+        return $userId !== null && $this->author !== null && $this->author === $userId;
+    }
+
+    public function canBeEditedBy(?User $user): bool
+    {
+        if ($user === null || $user->getId() === null) {
+            return false;
+        }
+
+        return $user->isAdmin() || $this->isOwnedBy($user->getId());
+    }
+
+    public function canBeDeletedBy(?User $user): bool
+    {
+        return $this->canBeEditedBy($user);
+    }
+
+    public function canBeReadBy(?User $user): bool
+    {
+        if ($this->isPublic()) {
+            return true;
+        }
+
+        return $this->canBeEditedBy($user);
+    }
+
     public function getAuthor_name(): string | null
     {
         return $this->author_name;
     }
 
-    /**
-     * @param string|null $author_name
-     * @return $this
-     */
     public function setAuthor_name(string | null $author_name): Post
     {
         $this->author_name = $author_name;
         return $this;
     }
 
-
-    /**
-     * @return string|null
-     */
     public function getImage(): string | null
     {
         return $this->image;
     }
 
-
-    /**
-     * @param string|null $image
-     * @return $this
-     */
     public function setImage(string | null $image): Post
     {
         $this->image = $image;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getContent(): string | null
     {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     * @return Post
-     */
     public function setContent(string | null $content): Post
     {
         $this->content = $content;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getAuthor(): int | null
     {
         return $this->author;
     }
 
-    /**
-     * @param int $author
-     * @return Post
-     */
     public function setAuthor(int | null $author): Post
     {
         $this->author = $author;
