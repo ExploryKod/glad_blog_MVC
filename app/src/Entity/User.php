@@ -11,6 +11,20 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
     public const STATUS_USER = 'user';
     public const STATUS_ADMIN = 'admin';
 
+    /**
+     * @var array<string, string>
+     */
+    protected array $hydrationMap = [
+        'id' => 'setId',
+        'username' => 'setUsername',
+        'password' => 'setPassword',
+        'email' => 'setEmail',
+        'first_name' => 'setFirst_name',
+        'last_name' => 'setLast_name',
+        'birth_date' => 'setBirth_date',
+        'status' => 'setStatus',
+    ];
+
     private ?int $id = null;
     private string | null $username = null;
     private string | null $password = null;
