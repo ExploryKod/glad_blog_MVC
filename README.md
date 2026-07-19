@@ -3,7 +3,7 @@
 </p>
 
 # <p align="center">Glad Blog </a></p>
-## <p align="center"> Blog - rendu du 27/11 dans le cadre du cours de backend </p>
+
 
 ### Buts
 
