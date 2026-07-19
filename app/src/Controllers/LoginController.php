@@ -31,6 +31,9 @@ class LoginController extends AbstractController
         $this->render("users/profile.php", [
             "message" => "",
             "userData" => $user?->getUsername(),
+            "userEmail" => $user?->getEmail(),
+            "userFirstName" => $user?->getFirst_name(),
+            "userLastName" => $user?->getLast_name(),
             "status" => $user?->getStatus(),
             "data" => $_GET
         ], "profile");
@@ -62,6 +65,9 @@ class LoginController extends AbstractController
             $this->render("users/profile.php", [
                 "message" => $message,
                 "userData" => $user->getUsername(),
+                "userEmail" => $user->getEmail(),
+                "userFirstName" => $user->getFirst_name(),
+                "userLastName" => $user->getLast_name(),
                 "status" => $user->getStatus(),
                 "data" => $_POST
             ], "profile");

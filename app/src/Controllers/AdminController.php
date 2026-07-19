@@ -22,10 +22,15 @@ class AdminController extends AbstractController
         $answer = htmlspecialchars($_POST['answer'] ?? '');
 
         if ($answer !== 'blanc') {
+            $user = $this->users()->getByUserid((string) $userId);
             $this->render("users/profile.php", [
                 'message' => 'Vous n\' avez pas su répondre, vous n\' êtes pas admis',
-                'tailwind' => [false, '/public/js/tailwind.js']
-            ], "backoffice");
+                'userData' => $user?->getUsername(),
+                'userEmail' => $user?->getEmail(),
+                'userFirstName' => $user?->getFirst_name(),
+                'userLastName' => $user?->getLast_name(),
+                'status' => $user?->getStatus(),
+            ], "profile");
             return;
         }
 
