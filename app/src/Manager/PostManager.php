@@ -56,6 +56,13 @@ class PostManager extends BaseManager
         return $readPosts;
     }
 
+    public function findPost(int $postId): ?Post
+    {
+        $posts = $this->getPost($postId);
+
+        return $posts[0] ?? null;
+    }
+
     public function deletePost($post_id){
         $dropPostReq = $this->pdo->prepare("DELETE FROM posts WHERE idpost = :post_id");
         $dropPostReq->execute([

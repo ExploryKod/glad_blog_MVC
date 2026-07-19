@@ -1,37 +1,94 @@
 <main class="position-relative">
-    <?php if(isset($message) && !empty($message)): ?>
+    <?php if (isset($message) && !empty($message)): ?>
         <div id="fading-alert" class="alert alert-info shadow flash-alert">
-            <p class="text-center fw-bold fs-5 mb-0"><?= $message ?></p>
+            <p class="text-center fw-bold fs-5 mb-0"><?= htmlspecialchars((string) $message) ?></p>
         </div>
     <?php endif ?>
 
-    <section class="custom-hero-container">
-        <div class="hero-panel bg-custom-secundary-transparent">
-            <h1 class="text-white text-center fs-1 mb-0">Bienvenue sur votre espace</h1>
-        </div>
-    </section>
+    <?php
+    $displayName = htmlspecialchars((string) ($userData ?? 'lecteur'));
+    $isAdmin = isset($status) && $status === 'admin';
+    $roleBadges = $isAdmin ? ['Auteur', 'Administrateur'] : ['Auteur'];
+    $email = htmlspecialchars((string) ($userEmail ?? ''));
+    $fullName = trim(($userFirstName ?? '') . ' ' . ($userLastName ?? ''));
+    $fullName = $fullName !== '' ? htmlspecialchars($fullName) : null;
+    $statusLabel = $isAdmin ? 'Administrateur' : 'Auteur';
+    ?>
 
-    <section class="profile-welcome bg-dark">
-        <?php if(isset($userData)) { ?>
-            <h2 class="text-white fw-bold fs-3 mb-2">Bonjour <?= htmlspecialchars((string) $userData) ?></h2>
-            <p class="text-white fs-5 mb-0">Nous vous souhaitons la bienvenue et espérons que vous allez être inspiré.</p>
-        <?php } else { ?>
-            <h2 class="text-white">Bienvenue</h2>
-        <?php } ?>
-    </section>
-
-    <section class="page section--tight">
-        <div class="dashboard bg-light shadow">
-            <h2 class="fs-3 mb-4 text-center">Votre tableau de bord</h2>
-            <div class="d-grid gap-3">
-                <?php if(isset($status) && $status !== 'admin') { ?>
-                    <a class="btn btn-lg btn-info" role="button" href="/upgrade">Devenir administrateur</a>
-                <?php } ?>
-                <?php if(isset($status) && $status === 'admin') { ?>
-                    <a class="btn btn-lg btn-warning" href="/backoffice">Espace d'administration</a>
-                <?php } ?>
-                <a class="btn btn-lg btn-success" role="button" href="/writer">Rédiger un post</a>
+    <section class="profile-hero">
+        <div class="page">
+            <div class="profile-hero__inner">
+                <p class="profile-hero__eyebrow">Mon espace</p>
+                <h1 class="profile-hero__title">Bonjour <?= $displayName ?></h1>
+                <p class="profile-hero__lead">Retrouvez ici vos actions d’écriture et d’administration.</p>
+                <div class="profile-roles">
+                    <span class="profile-roles__label">Mes rôles :</span>
+                    <?php foreach ($roleBadges as $roleBadge): ?>
+                        <span class="profile-badge"><?= htmlspecialchars($roleBadge) ?></span>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </div>
+    </section>
+
+    <section class="page section profile-dashboard">
+        <header class="profile-dashboard__header">
+            <h2 class="profile-dashboard__title">Votre tableau de bord</h2>
+            <p class="profile-dashboard__subtitle">Choisissez une action pour continuer.</p>
+        </header>
+
+        <div class="profile-actions">
+            <a class="profile-action" href="/writer">
+                <span class="profile-action__label">Écrire</span>
+                <span class="profile-action__title">Rédiger un post</span>
+                <span class="profile-action__text">Composez un nouvel article pour le blog.</span>
+            </a>
+
+            <?php if ($isAdmin): ?>
+                <a class="profile-action profile-action--accent" href="/backoffice">
+                    <span class="profile-action__label">Admin</span>
+                    <span class="profile-action__title">Espace d’administration</span>
+                    <span class="profile-action__text">Gérez les comptes utilisateurs.</span>
+                </a>
+            <?php else: ?>
+                <a class="profile-action profile-action--soft" href="/upgrade">
+                    <span class="profile-action__label">Accès</span>
+                    <span class="profile-action__title">Devenir administrateur</span>
+                    <span class="profile-action__text">Passez le quiz pour débloquer le backoffice.</span>
+                </a>
+            <?php endif; ?>
+
+            <a class="profile-action profile-action--muted" href="/">
+                <span class="profile-action__label">Lecture</span>
+                <span class="profile-action__title">Voir le blog</span>
+                <span class="profile-action__text">Retournez à la page d’accueil.</span>
+            </a>
+        </div>
+
+        <aside class="profile-summary">
+            <h3 class="profile-summary__title">Compte</h3>
+            <dl class="profile-summary__list">
+                <div>
+                    <dt>Pseudo</dt>
+                    <dd><?= $displayName ?></dd>
+                </div>
+                <?php if ($fullName): ?>
+                    <div>
+                        <dt>Nom</dt>
+                        <dd><?= $fullName ?></dd>
+                    </div>
+                <?php endif; ?>
+                <?php if ($email !== ''): ?>
+                    <div>
+                        <dt>Email</dt>
+                        <dd><?= $email ?></dd>
+                    </div>
+                <?php endif; ?>
+                <div>
+                    <dt>Statut</dt>
+                    <dd><?= $statusLabel ?></dd>
+                </div>
+            </dl>
+        </aside>
     </section>
 </main>

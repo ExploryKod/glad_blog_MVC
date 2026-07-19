@@ -71,16 +71,28 @@ class PostController extends AbstractController
     #[Route('/read', name: "read", methods: ["GET", "POST"])]
     public function read_single_post()
     {
-        $this->requireAuth();
+        $postId = intval($_GET['post_id'] ?? 0);
+        $post = $this->posts()->findPost($postId);
 
-        $post_id = intval($_GET['post_id'] ?? 0);
+        if ($post === null) {
+            $this->redirect('/?error=post_not_found');
+        }
+
+        $reader = null;
+        if ($this->session()->isLoggedIn()) {
+            $reader = $this->users()->getByUserid((string) ($this->session()->userId() ?? 0));
+        }
+
+        if (!$post->canBeReadBy($reader)) {
+            $this->redirect('/login?error=auth_required');
+        }
 
         $this->render("users/read.php", [
-            'comment' => $this->comments()->getComment($post_id),
-            'posts' => $this->posts()->getAllPosts(),
-            'thePost' => $this->posts()->getPost($post_id),
-            'id_post' => $post_id,
-        ], "Espace de lecture");
+            'thePost' => $post,
+            'comment' => $this->comments()->getComment($postId),
+            'id_post' => $postId,
+            'isLoggedIn' => $this->session()->isLoggedIn(),
+        ], htmlspecialchars((string) $post->getTitle()));
     }
 
     #[Route('/deletepost', name: "deletepost", methods: ["GET"])]
