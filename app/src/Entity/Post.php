@@ -9,7 +9,23 @@ class Post extends BaseEntity
     public const STATUS_PUBLIC = 1;
     public const STATUS_PRIVATE = 2;
 
-    private int | null $postid = null;
+    /**
+     * Colonne SQL => setter (évite les coincidences de nom fragiles).
+     *
+     * @var array<string, string>
+     */
+    protected array $hydrationMap = [
+        'idpost' => 'setIdpost',
+        'content' => 'setContent',
+        'author' => 'setAuthor',
+        'author_name' => 'setAuthor_name',
+        'title' => 'setTitle',
+        'public' => 'setPublic',
+        'image' => 'setImage',
+    ];
+
+    /** Aligné sur la colonne SQL `idpost`. */
+    private int | null $idpost = null;
     private string | null $content = null;
     private int | null $author = null;
     private string | null $author_name = null;
@@ -55,14 +71,21 @@ class Post extends BaseEntity
         return $post;
     }
 
+    /**
+     * @return int|null
+     */
     public function getIdpost(): int | null
     {
-        return $this->postid;
+        return $this->idpost;
     }
 
-    public function setIdpost(int | null $postid): Post | null
+    /**
+     * @param int|null $idpost
+     * @return Post|null
+     */
+    public function setIdpost(int | null $idpost): Post | null
     {
-        $this->postid = $postid;
+        $this->idpost = $idpost;
         return $this;
     }
 

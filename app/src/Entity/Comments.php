@@ -6,6 +6,20 @@ use Gladblog\Exception\DomainException;
 
 class Comments extends BaseEntity
 {
+    /**
+     * @var array<string, string>
+     */
+    protected array $hydrationMap = [
+        'id_comment' => 'setId_comment',
+        'author_comment' => 'setAuthor_comment',
+        'publish_date' => 'setPublish_date',
+        'content_comment' => 'setContent_comment',
+        'id_post' => 'setId_post',
+        'id_upper_comment' => 'setId_upper_comment',
+        'post_title' => 'setPost_title',
+        'admin_comment' => 'setAdmin_comment',
+    ];
+
     private int $id_comment;
     private string $author_comment;
     private ?string $publish_date = null;

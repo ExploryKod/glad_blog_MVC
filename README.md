@@ -17,7 +17,7 @@ le but est d'apprendre deux types de compétence:
 
 Les [design patterns](https://refactoring.guru/design-patterns) mis en œuvre :
 
-- **[Factory Method](https://refactoring.guru/design-patterns/factory-method)** : `PDOFactory` encapsule la création des connexions PDO (`getMySqlPDO()`, etc.) derrière l’interface `Database`.
+- **[Abstract Factory](https://refactoring.guru/design-patterns/abstract-factory)** : `PdoConnectionFactory` (MySQL / Postgres) et `DocumentConnectionFactory` (Mongo) ; l’app utilise `MySqlConnectionFactory` par défaut.
 - **[Template Method](https://refactoring.guru/design-patterns/template-method)** : les classes abstraites `AbstractController`, `BaseManager` et `BaseEntity` fixent le squelette (dispatch, connexion PDO, hydratation) ; les sous-classes n’implémentent que le détail.
 
 ## Technologie
